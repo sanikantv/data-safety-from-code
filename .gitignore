@@ -25,16 +25,11 @@ data-safety/
 findings.json
 declaration.json
 
-# --- Site ---
-.wrangler/
+# --- Node ---
 node_modules/
-site/dist/
-site/.astro/
-site/og-src/
 
-# --- Video ---
-video/out/
-video/node_modules/
+# --- Video source (kept local; only the rendered video is committed, see MEDIA.md) ---
+video/
 
 # --- OS ---
 .DS_Store

@@ -18,7 +18,7 @@
 
 An agent skill that scans your Android codebase and writes the **Google Play Data safety form as a CSV** that Play Console can import. Every answer comes with evidence: the file and line that justify it, or the SDK vendor's own disclosure page.
 
-[![Watch the 46-second intro](art/intro-poster.png)](https://datasafety.sanikant.dev/media/intro.mp4)
+[![Watch the 46-second intro](art/intro-poster.png)](art/intro.mp4)
 
 > **A draft for review, not a compliance guarantee.** Google holds you, the developer, responsible for your Data safety declaration. The skill shows you why it gave each answer and lists what it could not verify, such as what your backend does with the data.
 
@@ -87,9 +87,7 @@ Firebase Analytics, Crashlytics, Authentication, Firestore, Cloud Messaging, Per
 |---|---|
 | `skills/data-safety-from-code/` | The skill: `SKILL.md`, scripts, knowledge base, Google's CSV template |
 | `tests/` | Four fixture Android apps with golden CSVs, a round trip of a real export, validator cases |
-| `site/` | Docs and landing site (Astro Starlight), deployed to datasafety.sanikant.dev |
-| `video/` | The intro video (Remotion) and its voiceover script ([MEDIA.md](MEDIA.md)) |
-| `art/` | Icon, social preview, banner, diagram (rendered from HTML) |
+| `art/` | Icon, social preview, banner, diagram (rendered from HTML) and the intro video `intro.mp4` ([MEDIA.md](MEDIA.md)) |
 
 Run the tests:
 
