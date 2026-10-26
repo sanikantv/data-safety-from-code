@@ -32,6 +32,8 @@ export default defineConfig({
           tag: 'link',
           attrs: { rel: 'preload', href: '/fonts/material-symbols-rounded.woff2', as: 'font', type: 'font/woff2', crossorigin: '' },
         },
+        // Google Search Console ownership check. Keep it, or the property loses verification.
+        { tag: 'meta', attrs: { name: 'google-site-verification', content: 'umeNRLlQKuAWDZaTioJXcfOPPrNz9d72Y4BkCPLYxlc' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#F5FBF5', media: '(prefers-color-scheme: light)' } },
         { tag: 'meta', attrs: { name: 'theme-color', content: '#0F1511', media: '(prefers-color-scheme: dark)' } },
         // Copy buttons on install commands.
