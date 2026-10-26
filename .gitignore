@@ -1,0 +1,41 @@
+# --- AI tooling (never push these) ---
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.cursor/
+.cursorrules
+.codex/
+AGENTS.md
+
+# --- Secrets ---
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+play-service-account*.json
+
+# --- Python ---
+__pycache__/
+*.pyc
+.venv/
+
+# --- Skill work files when run inside this repo ---
+data-safety/
+findings.json
+declaration.json
+
+# --- Site ---
+.wrangler/
+node_modules/
+site/dist/
+site/.astro/
+site/og-src/
+
+# --- Video ---
+video/out/
+video/node_modules/
+
+# --- OS ---
+.DS_Store
+Thumbs.db

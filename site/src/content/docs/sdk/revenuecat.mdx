@@ -1,0 +1,67 @@
+---
+title: "RevenueCat: Data safety form answers"
+description: "What RevenueCat collects for the Google Play Data safety form: purchase history. Purposes, sharing and the exact CSV rows."
+keywords:
+  - "revenuecat data safety"
+  - "revenuecat data safety form"
+  - "revenuecat google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **RevenueCat Purchases SDK** from RevenueCat, its data counts as data your app collects. According to the vendor, it collects purchase history (collected, not shared: the vendor acts as a service provider).
+
+Matched dependencies: `com.revenuecat.purchases:purchases*`.
+
+<Aside type="tip" title="Source">From RevenueCat's own Play data disclosure: [www.revenuecat.com](https://www.revenuecat.com/docs/platform-resources/google-platform-resources/google-plays-data-safety). Checked 2026-10-26.</Aside>
+
+## What to declare
+
+| Data type | Collected | Shared | Ephemeral | Purposes |
+|---|---|---|---|---|
+| Purchase history | Yes | No | No | App functionality; Analytics |
+
+Whether each type is **required or optional** for users depends on your app: optional only if users can turn it off and the app honors that.
+
+## Only declare these if they apply
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| Name | Only if you store it in customer attributes | Yes | No | Choose yours |
+| Email address | Only if you store it in customer attributes | Yes | No | Choose yours |
+| Phone number | Only if you store it in customer attributes | Yes | No | Choose yours |
+| Device or other IDs | Only if you use integrations that rely on advertising identifiers (GAID, Android ID) | Yes | No | Choose yours |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+RevenueCat collects purchase history (not optional, not ephemeral) and acts as a service provider. Mark it shared too if you forward data to non-service-provider integrations. Locale and currency are collected but are not location. No crash logs or diagnostics.
+
+## The CSV rows this sets
+
+These are the rows of Google's [Data safety CSV](/reference/csv-format/) that RevenueCat turns to `true` (or `false` for the ephemeral question). Columns: question ID, response ID, value. You also answer the required/optional row for each type.
+
+```csv
+PSL_DATA_TYPES_FINANCIAL,PSL_PURCHASE_HISTORY,true
+PSL_DATA_USAGE_RESPONSES:PSL_PURCHASE_HISTORY:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_PURCHASE_HISTORY:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_PURCHASE_HISTORY:DATA_USAGE_COLLECTION_PURPOSE,PSL_APP_FUNCTIONALITY,true
+PSL_DATA_USAGE_RESPONSES:PSL_PURCHASE_HISTORY:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+```
+
+## Detect it automatically
+
+`data-safety-from-code` finds RevenueCat in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other payments SDKs
+
+- [Google Play Billing Library data safety](/sdk/play-billing/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

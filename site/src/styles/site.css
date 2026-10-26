@@ -1,0 +1,17 @@
+/* Bits of the landing page that aren't in a component. */
+.hero-actions-end {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.sl-markdown-content table code {
+  overflow-wrap: anywhere;
+}
+.intro-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 1.5rem;
+  background: var(--md-surface-container);
+}

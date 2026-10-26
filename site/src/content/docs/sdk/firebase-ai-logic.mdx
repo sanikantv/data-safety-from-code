@@ -1,0 +1,47 @@
+---
+title: "Firebase AI Logic: Data safety form answers"
+description: "How to declare Firebase AI Logic in the Google Play Data safety form: what it can collect, when it applies, and the CSV rows to set."
+keywords:
+  - "firebase ai logic data safety"
+  - "firebase ai logic data safety form"
+  - "firebase ai logic google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Firebase AI Logic (formerly Vertex AI in Firebase)** from Google, its data counts as data your app collects. What it collects depends on how you use it, so each data type below has a condition.
+
+Matched dependencies: `com.google.firebase:firebase-ai`, `com.google.firebase:firebase-vertexai`.
+
+<Aside type="tip" title="Source">From Google's own Play data disclosure: [firebase.google.com](https://firebase.google.com/docs/android/play-data-disclosure). Checked 2026-10-26.</Aside>
+
+## What it can collect
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| Other user-generated content | If the app sends user-written prompts or text | Yes | No | App functionality |
+| Photos | If the app sends user photos/images to the model | Yes | No | App functionality |
+| User IDs | Only if a user is signed in with Firebase Authentication | Yes | No | App functionality |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+Sends whatever "developer-defined end-user data" your app puts in requests (prompts, images, files), so declare the matching types. Sends the Firebase Auth user ID on every request if a user is signed in. If AI monitoring is enabled in the console, prompts and outputs from sampled requests are retained.
+
+## Detect it automatically
+
+`data-safety-from-code` finds Firebase AI Logic in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other generative ai SDKs
+
+- [OpenAI client libraries data safety](/sdk/openai-client/)
+- [Gemini API (Google AI client SDK) data safety](/sdk/google-ai-client-sdk/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

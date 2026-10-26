@@ -1,0 +1,134 @@
+---
+title: How to Fill the Data Safety Form on Google Play
+description: A step-by-step way to fill Google Play's Data safety form, from listing what leaves the device to choosing the purposes for each data type, then previewing and submitting.
+keywords:
+  - how to fill data safety form google play
+  - google play data safety section
+  - data safety form play console
+  - data safety form sdk data
+faq:
+  - q: Where is the Data safety form in Play Console?
+    a: Open your app in Play Console, go to the App content page, and select Start under Data safety. You can also export or import the whole form as a CSV from the top right of that page.
+  - q: Do I have to declare data collected by SDKs?
+    a: Yes. Google counts data that libraries and SDKs in your app send off the device as collected by your app, whether it goes to you or to a third party.
+  - q: Can I save the Data safety form and finish it later?
+    a: Yes. Play Console lets you save the form as a draft before you submit it.
+---
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+**Short answer:** in Play Console, open **App content**, select **Start** under Data safety, and
+answer four groups of questions: data collection and security, the data types you collect or
+share, how each type is used, and a final store listing preview. The form itself is quick. The
+slow part is knowing what your app and its SDKs actually send off the device, so do that
+inventory first.
+
+## Before you open Play Console
+
+Gather these first. Each one maps to a question you can't skip.
+
+- **Everything that leaves the device.** Your own network calls, uploads and database writes,
+  plus every SDK in the release build. Google counts data sent by libraries and SDKs as
+  collected by your app.
+- **Each SDK's own Data safety guidance.** Google tells developers to check what their SDK
+  providers publish, and the Google Play SDK Index links to that guidance where a provider has
+  added it. See the [SDK pages on this site](/sdk/) for the ones this project tracks.
+- **A privacy policy URL.** Google says it is required to complete the form.
+- **How users create accounts**, if they can, and a link where they can ask for the account
+  and its data to be deleted.
+- **Whether users can request deletion of their data**, and how.
+
+## The steps in Play Console
+
+These follow Google's own [Data safety help page](https://support.google.com/googleplay/android-developer/answer/10787469).
+
+1. Open the **App content** page and select **Start** under "Data safety".
+2. Read the overview.
+3. **Data collection and security.** Say whether the app collects or shares any of the
+   required user data types, whether all of it is encrypted in transit, how users create
+   accounts, and whether they can request deletion.
+4. **Data types.** Select every type the app collects or shares, such as approximate location,
+   app interactions, crash logs or device IDs.
+5. **Data usage and handling.** For each selected type, say whether it is collected, shared or
+   both, whether it is processed ephemerally, whether it is required or optional, and why it is
+   collected and shared.
+6. **Store listing preview.** Check the summary users will see, then **Save as draft** or
+   **Submit**.
+
+Google notes that changes can take several days to show on Google Play, in some cases up to 7.
+
+If you'd rather fill everything in a file, you can
+[export the form as a CSV](/guides/export-data-safety-csv/), edit it, and
+[import it back](/guides/import-data-safety-csv/).
+
+## The rules that decide most answers
+
+- **Collected** means the data is sent off the device. Data processed only on the device is not
+  collected. Neither is data sent with end-to-end encryption that no one in between, you
+  included, can read.
+- **Shared** means it goes to a third party. A service provider that processes data for you,
+  under your instructions, is not a third party. See
+  [collected vs shared](/guides/collected-vs-shared/).
+- **Ephemeral** processing still counts as collection. You answer one extra question for it.
+  See [ephemeral processing](/guides/ephemeral-processing/).
+- **Optional** only applies when every user, on any device and in any region, can choose not
+  to provide the data. If any version requires it, it is required.
+- **One form covers the app.** It describes the sum of what every version still distributed on
+  Google Play collects and shares.
+- **An IP address used to find location** means you declare location. See
+  [IP address and location](/guides/ip-address-location/).
+- **Payments through Google Play's billing system**: you generally don't declare the payment
+  details Google collects, as long as your app never accesses them. Purchase history is a
+  separate question.
+- **Encryption in transit** is a yes only if it applies to all user data your app and its SDKs
+  send.
+
+The full set of definitions, with links to Google's wording, is on the
+[definitions reference](/reference/definitions/).
+
+## CSV IDs for the main questions
+
+If you work in the CSV, these are the question rows behind each step. The full list is in the
+[CSV format reference](/reference/csv-format/).
+
+| Question | Question ID / Response IDs |
+|---|---|
+| Does the app collect or share data? | `PSL_DATA_COLLECTION_COLLECTS_PERSONAL_DATA` |
+| Encrypted in transit? | `PSL_DATA_COLLECTION_ENCRYPTED_IN_TRANSIT` |
+| Account creation methods | `PSL_SUPPORTED_ACCOUNT_CREATION_METHODS` with `PSL_ACM_USER_ID_PASSWORD`, `PSL_ACM_OAUTH`, `PSL_ACM_NONE` and others |
+| Account deletion link | `PSL_ACCOUNT_DELETION_URL` |
+| Data deletion requests | `PSL_SUPPORT_DATA_DELETION_BY_USER` with `DATA_DELETION_YES`, `DATA_DELETION_NO`, `DATA_DELETION_NO_AUTO_DELETED` |
+| A data type | e.g. `PSL_DATA_TYPES_LOCATION` with `PSL_APPROX_LOCATION` |
+| Collected, shared or both | `PSL_DATA_USAGE_ONLY_COLLECTED`, `PSL_DATA_USAGE_ONLY_SHARED` |
+| Required or optional | `PSL_DATA_USAGE_USER_CONTROL_REQUIRED`, `PSL_DATA_USAGE_USER_CONTROL_OPTIONAL` |
+| Purposes | `PSL_APP_FUNCTIONALITY`, `PSL_ANALYTICS`, `PSL_ADVERTISING`, `PSL_FRAUD_PREVENTION_SECURITY` and others |
+
+## Common mistakes
+
+- **Leaving out SDK data.** AdMob's disclosure, for example, lists approximate location, app
+  interactions, diagnostics and device or other IDs. Read each vendor's page, such as
+  [AdMob](/sdk/admob/) or [Firebase Crashlytics](/sdk/firebase-crashlytics/).
+- **Marking a service provider as "shared".** Your cloud host or crash reporter working for you
+  is collection, not sharing.
+- **Declaring data because of a permission.** Reading contacts on the device is not collecting
+  them. If a sensitive permission isn't used, remove it instead of declaring its data.
+- **Answering for the latest version only.** Older versions still on Google Play count.
+- **"Optional" for SDK data the user can't turn off.** Analytics without a working opt-out is
+  required.
+- **Encrypted in transit "yes" with a plain `http://` endpoint** that receives user data.
+
+## With data-safety-from-code
+
+The skill does the inventory step for you. It reads your manifest, Gradle files and Kotlin or
+Java source, matches SDKs against vendor disclosures, and asks you only what code can't show,
+such as your privacy policy URL and account deletion link. It writes a CSV you can import and a
+report with file:line evidence for every answer. The result is a draft you review, and you stay
+responsible for what you submit. [Get started](/getting-started/).
+
+## Related
+
+- [Import a Data safety CSV](/guides/import-data-safety-csv/)
+- [Why a Data safety form gets rejected](/guides/data-safety-form-rejected/)
+- [Data safety for an app that collects no data](/guides/app-with-no-data/)
+- [Questions about the Data safety form](/faq/)
+
+<GuideEnd />

@@ -1,0 +1,730 @@
+# SDK knowledge base for Google Play's Data safety form.
+#
+# Each entry maps an Android SDK (matched by exact Maven group:artifact; a trailing * matches a prefix) to the
+# Play Data safety CSV IDs (PSL_*) its vendor says it collects or shares.
+# Entries come from each vendor's official Play data-disclosure documentation,
+# linked in `source`. Where a vendor publishes no Play disclosure page, the entry
+# is marked `confidence: inferred` and the notes say so.
+#
+# Vendor pages describe data in their own words (for example "IP address",
+# "app-instance ID"). The PSL_* mapping is ours, following Google's Data types
+# guide. Purposes the vendor did not state are left as an empty list.
+# "shared" follows Google's rule: a service provider processing data on the
+# developer's behalf is not sharing.
+#
+# Verified: 2026-10-26
+
+# ---------------------------------------------------------------- Firebase ---
+
+- id: firebase-analytics
+  name: Google Analytics for Firebase
+  vendor: Google
+  category: analytics
+  match:
+    - com.google.firebase:firebase-analytics
+  source: https://support.google.com/analytics/answer/11582702
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Collects an app-instance ID and the Android Advertising ID automatically (ad ID
+    collection can be disabled in Analytics configuration; app-instance ID via the
+    Consent Mode API). Google Signals, linking Google Ads, and Data Sharing Settings
+    can change what is collected and whether it counts as shared; if you link Google
+    Ads or export audiences, also declare PSL_ADVERTISING and review "shared".
+  data:
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+    - type: PSL_APPROX_LOCATION
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "Derived from the device's masked IP address"
+      condition: null
+    - type: PSL_USER_INTERACTION
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "App lifecycle events: screen views and sessions"
+      condition: null
+    - type: PSL_PURCHASE_HISTORY
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: "Only if the app sells in-app products or subscriptions (purchase events are logged automatically)"
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: "Only if you call setUserId, or enable Google Signals (signed-in account identifiers)"
+
+- id: firebase-crashlytics
+  name: Firebase Crashlytics
+  vendor: Google
+  category: crash
+  match:
+    - com.google.firebase:firebase-crashlytics
+    - com.google.firebase:firebase-crashlytics-ndk
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Automatically sends stack traces, app state and device metadata at crash time, plus
+    a Crashlytics installation UUID. Depends on Firebase Installations and Sessions.
+    Custom keys, logs and user IDs you attach are also sent, so declare whatever they contain.
+  data:
+    - type: PSL_CRASH_LOGS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+    - type: PSL_PERFORMANCE_DIAGNOSTICS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "Application state and point-in-time device metadata at crash time"
+      condition: null
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "Crashlytics installation UUID (rotates with the Firebase installation ID)"
+      condition: null
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: "Only if you attach a user ID to crash reports (setUserId)"
+
+- id: firebase-auth
+  name: Firebase Authentication
+  vendor: Google
+  category: auth
+  match:
+    - com.google.firebase:firebase-auth
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Always collects the device IP address (security and abuse prevention during sign-up
+    and sign-in) and a generated Firebase Auth user ID. Other data depends on the sign-in
+    methods you enable. Federated providers may also return profile/contact info depending
+    on the scopes you request.
+  data:
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      what: "Generated Firebase Authentication user ID"
+      condition: null
+    - type: PSL_EMAIL
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only with email/password, email link, or a federated provider that returns an email"
+    - type: PSL_PHONE
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only with phone auth, phone as a sign-in method, or SMS second factor"
+    - type: PSL_NAME
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only if you set a display name or a federated provider returns one"
+
+- id: firebase-firestore
+  name: Cloud Firestore
+  vendor: Google
+  category: database
+  match:
+    - com.google.firebase:firebase-firestore
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Firestore stores whatever end-user data your app writes; declare those types yourself.
+    The SDK itself sends only the Firebase user agent, plus the Firebase Auth user ID on
+    every request when a user is signed in.
+  data:
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "Only if a user is signed in with Firebase Authentication"
+
+- id: firebase-messaging
+  name: Firebase Cloud Messaging
+  vendor: Google
+  category: messaging
+  match:
+    - com.google.firebase:firebase-messaging
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Sends app version and the Firebase user agent, and depends on Firebase Installations
+    (installation ID and token). Purpose is message delivery; if you send marketing or
+    product messages, also declare PSL_DEVELOPER_COMMUNICATIONS. Delivery metrics go to
+    BigQuery only if you enable that export.
+  data:
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      what: "Via Firebase Installations (installation ID / FCM registration token)"
+      condition: null
+
+- id: firebase-perf
+  name: Firebase Performance Monitoring
+  vendor: Google
+  category: analytics
+  match:
+    - com.google.firebase:firebase-perf
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Collects app start time, network request latency, CPU and memory usage, and device
+    metadata. Also collects the IP address to map events to countries (decide whether to
+    declare approximate location). Depends on Installations, Remote Config and Sessions.
+    Custom traces, metrics and attributes you define are also sent.
+  data:
+    - type: PSL_PERFORMANCE_DIAGNOSTICS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "Via Firebase Installations"
+      condition: null
+
+- id: firebase-remote-config
+  name: Firebase Remote Config
+  vendor: Google
+  category: other
+  match:
+    - com.google.firebase:firebase-config
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Sends country code, language code, time zone, OS/platform version, app ID and package
+    name for parameter targeting, and depends on Firebase Installations. With Google
+    Analytics included, user properties and first_open are used for targeting.
+  data:
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      what: "Via Firebase Installations"
+      condition: null
+
+- id: firebase-installations
+  name: Firebase Installations
+  vendor: Google
+  category: other
+  match:
+    - com.google.firebase:firebase-installations
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Collects the Firebase installation ID (FID), a per-installation identifier that Google
+    says does not uniquely identify a user or device, plus the Firebase user agent.
+    Usually pulled in transitively by Messaging, Crashlytics, Performance and Remote Config.
+    The page does not state a purpose.
+  data:
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: []
+      condition: null
+
+- id: firebase-ai-logic
+  name: Firebase AI Logic (formerly Vertex AI in Firebase)
+  vendor: Google
+  category: ai
+  match:
+    - com.google.firebase:firebase-ai
+    - com.google.firebase:firebase-vertexai
+  source: https://firebase.google.com/docs/android/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    Sends whatever "developer-defined end-user data" your app puts in requests (prompts,
+    images, files), so declare the matching types. Sends the Firebase Auth user ID on every
+    request if a user is signed in. If AI monitoring is enabled in the console, prompts and
+    outputs from sampled requests are retained.
+  data:
+    - type: PSL_USER_GENERATED_CONTENT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user-written prompts or text"
+    - type: PSL_PHOTOS
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user photos/images to the model"
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "Only if a user is signed in with Firebase Authentication"
+
+# --------------------------------------------------------------------- Ads ---
+
+- id: admob
+  name: Google Mobile Ads SDK (AdMob)
+  vendor: Google
+  category: ads
+  match:
+    - com.google.android.gms:play-services-ads
+    - com.google.android.gms:play-services-ads-lite
+  source: https://developers.google.com/admob/android/privacy/play-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    All four types are collected and shared automatically for advertising, analytics and
+    fraud prevention. Ad ID collection can be stopped via the manifest, and Limited Ads may
+    stop ad ID transmission. The page covers play-services-ads only; ads-lite is assumed to
+    behave the same. Optional features or tests may require extra disclosures.
+  data:
+    - type: PSL_APPROX_LOCATION
+      collected: true
+      shared: true
+      purposes: [PSL_ADVERTISING, PSL_ANALYTICS, PSL_FRAUD_PREVENTION_SECURITY]
+      what: "IP address, which may be used to estimate general location"
+      condition: null
+    - type: PSL_USER_INTERACTION
+      collected: true
+      shared: true
+      purposes: [PSL_ADVERTISING, PSL_ANALYTICS, PSL_FRAUD_PREVENTION_SECURITY]
+      what: "App launch, taps, video views"
+      condition: null
+    - type: PSL_PERFORMANCE_DIAGNOSTICS
+      collected: true
+      shared: true
+      purposes: [PSL_ADVERTISING, PSL_ANALYTICS, PSL_FRAUD_PREVENTION_SECURITY]
+      what: "App launch time, hang rate, energy usage"
+      condition: null
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: true
+      purposes: [PSL_ADVERTISING, PSL_ANALYTICS, PSL_FRAUD_PREVENTION_SECURITY]
+      what: "Advertising ID, app set ID, and identifiers of signed-in accounts if applicable"
+      condition: null
+
+- id: user-messaging-platform
+  name: Google User Messaging Platform (UMP) SDK
+  vendor: Google
+  category: ads
+  match:
+    - com.google.android.ump:user-messaging-platform
+  source: https://developers.google.com/admob/android/privacy/play-data-disclosure
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No vendor Play disclosure for UMP was found; the AdMob page only links to it. UMP is
+    normally used alongside the Google Mobile Ads SDK, whose disclosure covers the ads data.
+    No data types are listed here; verify before relying on this.
+  data: []
+
+# ---------------------------------------------------------------- Payments ---
+
+- id: revenuecat
+  name: RevenueCat Purchases SDK
+  vendor: RevenueCat
+  category: payments
+  match:
+    - com.revenuecat.purchases:purchases*
+  source: https://www.revenuecat.com/docs/platform-resources/google-platform-resources/google-plays-data-safety
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    RevenueCat collects purchase history (not optional, not ephemeral) and acts as a service
+    provider. Mark it shared too if you forward data to non-service-provider integrations.
+    Locale and currency are collected but are not location. No crash logs or diagnostics.
+  data:
+    - type: PSL_PURCHASE_HISTORY
+      collected: true
+      shared: false
+      ephemeral: false
+      optional: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ANALYTICS]
+      condition: null
+    - type: PSL_NAME
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you store it in customer attributes"
+    - type: PSL_EMAIL
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you store it in customer attributes"
+    - type: PSL_PHONE
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you store it in customer attributes"
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you use integrations that rely on advertising identifiers (GAID, Android ID)"
+
+- id: play-billing
+  name: Google Play Billing Library
+  vendor: Google
+  category: payments
+  match:
+    - com.android.billingclient:billing
+  source: https://support.google.com/googleplay/android-developer/answer/10787469
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No vendor Play disclosure page for the Billing Library was found. Google's Data safety
+    help says payment data collected directly by the payment service (and never accessed by
+    your app) need not be declared, but purchase history your app or backend receives should
+    be reviewed. Declare purchase history if you send purchase tokens or orders off-device.
+  data:
+    - type: PSL_PURCHASE_HISTORY
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app or its backend stores or verifies purchases (tokens, order IDs) off-device"
+
+# -------------------------------------------------------------------- Auth ---
+
+- id: google-sign-in
+  name: Sign in with Google / Credential Manager
+  vendor: Google
+  category: auth
+  match:
+    - com.google.android.gms:play-services-auth
+    - androidx.credentials:credentials
+    - com.google.android.libraries.identity.googleid:googleid
+  source: https://developers.google.com/android/guides/play-data-disclosure
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No vendor Play disclosure for these libraries was found (the Play services page covers
+    only base, basement, oss-licenses and tasks). The sign-in flow returns the user's name,
+    email and Google account ID to the app; declare them only if the app sends them (or the
+    ID token) off-device, e.g. to its own backend.
+  data:
+    - type: PSL_NAME
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "If the app sends the profile or ID token off-device"
+    - type: PSL_EMAIL
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "If the app sends the profile or ID token off-device"
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "If the app sends the Google account ID or ID token off-device"
+
+# ---------------------------------------------------------------------- ML ---
+
+- id: ml-kit
+  name: ML Kit (on-device APIs)
+  vendor: Google
+  category: ml
+  match:
+    - com.google.mlkit:*
+    - com.google.android.gms:play-services-mlkit-*
+  source: https://developers.google.com/ml-kit/android-data-disclosure
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    ML Kit sends only metadata (device and app info, identifiers, latency, API config,
+    input/output size, event types, error codes) for diagnostics and usage analytics, and
+    does not transfer it to third parties. The page does not list images, text or other
+    feature inputs as collected. Thin features add a device identifier; GenAI features add
+    user or device identifiers.
+  data:
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "Per-installation identifiers always; a device identifier for thin (Play services) features"
+      condition: null
+    - type: PSL_PERFORMANCE_DIAGNOSTICS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+
+# --------------------------------------------------------------- Messaging ---
+
+- id: onesignal
+  name: OneSignal Android SDK
+  vendor: OneSignal
+  category: messaging
+  match:
+    - com.onesignal:*
+  source: https://documentation.onesignal.com/docs/google-play-data-safety-requirements
+  verified: 2026-10-26
+  confidence: official
+  notes: >-
+    App interactions (sessions, notification clicks) are always collected. Other types
+    depend on what you send: email/phone if added to OneSignal, personal data via Tags or
+    Outcomes, precise location if your app collects and sends it, device IDs if you link
+    identifiers with Aliases (no GAID by default). The vendor's purpose answers for the
+    conditional types are shown only in screenshots and were not captured.
+  data:
+    - type: PSL_USER_INTERACTION
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS, PSL_DEVELOPER_COMMUNICATIONS]
+      condition: null
+    - type: PSL_PURCHASE_HISTORY
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: "If your app has in-app purchases"
+    - type: PSL_PRECISE_LOCATION
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if your app collects location and sends it to OneSignal"
+    - type: PSL_EMAIL
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you add email subscriptions to OneSignal"
+    - type: PSL_PHONE
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you add SMS subscriptions to OneSignal"
+    - type: PSL_NAME
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if sent via Tags or Outcomes"
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if sent via Tags or Outcomes"
+    - type: PSL_OTHER_PERSONAL
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if sent via Tags or Outcomes"
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: []
+      condition: "Only if you link identifiers with Aliases"
+
+# ------------------------------------------------------- Facebook / Meta ---
+
+- id: facebook-sdk
+  name: Facebook Android SDK (core, app events, login, share)
+  vendor: Meta
+  category: analytics
+  match:
+    - com.facebook.android:facebook-*
+  source: https://developers.facebook.com/docs/app-events/automatic-event-collection-detail
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    Meta publishes no Play Data safety guidance (the Play SDK Index lists it as "Not
+    provided"); this is inferred from Meta's automatic event logging docs. App events
+    (install, launch, Google Play purchases) and app metadata are logged automatically
+    unless AutoLogAppEventsEnabled is false; since v13 the SDK adds the AD_ID permission.
+    Meta uses this data for its own ads products, so it is treated as shared.
+  data:
+    - type: PSL_USER_INTERACTION
+      collected: true
+      shared: true
+      purposes: [PSL_ANALYTICS, PSL_ADVERTISING]
+      what: "Automatic app events (install, launch) unless AutoLogAppEventsEnabled=false"
+      condition: null
+    - type: PSL_PURCHASE_HISTORY
+      collected: true
+      shared: true
+      purposes: [PSL_ANALYTICS, PSL_ADVERTISING]
+      condition: "Only if the app sells in-app products and automatic purchase logging is on (the default)"
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: true
+      purposes: [PSL_ANALYTICS, PSL_ADVERTISING]
+      what: "Advertising ID (AD_ID permission added since SDK 13.0.0)"
+      condition: null
+    - type: PSL_CRASH_LOGS
+      collected: true
+      shared: true
+      purposes: [PSL_ANALYTICS]
+      what: "Facebook SDK crash reports (SDK crashes only, for Meta's internal use)"
+      condition: null
+    - type: PSL_NAME
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only with Facebook Login, if the app sends the profile off-device"
+    - type: PSL_EMAIL
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only with Facebook Login and the email permission, if sent off-device"
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY, PSL_ACCOUNT_MANAGEMENT]
+      condition: "Only with Facebook Login, if the app sends the user ID or token off-device"
+
+# ------------------------------------------------------ Crash / analytics ---
+
+- id: sentry-android
+  name: Sentry Android SDK
+  vendor: Sentry
+  category: crash
+  match:
+    - io.sentry:sentry-android*
+  source: https://docs.sentry.io/security-legal-pii/security/mobile-privacy/
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    Sentry gives no per-type Play table; its mobile privacy FAQ names Analytics and App
+    Functionality as standard purposes and says it uses a random per-installation ID, not
+    ANDROID_ID. Types are inferred from its Data Collected page: device context, HTTP
+    headers/bodies and IP (when userInfo is on) may be sent. Session Replay and breadcrumbs
+    can add more; declare what you enable.
+  data:
+    - type: PSL_CRASH_LOGS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS, PSL_APP_FUNCTIONALITY]
+      condition: null
+    - type: PSL_PERFORMANCE_DIAGNOSTICS
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS, PSL_APP_FUNCTIONALITY]
+      what: "Device context always; performance data if tracing is enabled"
+      condition: null
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS, PSL_APP_FUNCTIONALITY]
+      what: "Random installation ID when no user ID is set"
+      condition: null
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS, PSL_APP_FUNCTIONALITY]
+      condition: "Only if you call Sentry.setUser() or an integration adds user identity"
+
+- id: mixpanel-android
+  name: Mixpanel Android SDK
+  vendor: Mixpanel
+  category: analytics
+  match:
+    - com.mixpanel.android:mixpanel-android
+  source: https://docs.mixpanel.com/docs/tracking-methods/sdks/android
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No Mixpanel Play Data safety page was found; inferred from the Android SDK docs. The SDK
+    assigns a device ID / distinct_id, sends the events you track (and autocapture clicks if
+    enabled), and geolocates from the request IP unless UseIpAddressForGeolocation=false.
+    optOutTracking() can stop collection; declare event properties you add yourself.
+  data:
+    - type: PSL_USER_INTERACTION
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+    - type: PSL_DEVICE_ID
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: null
+    - type: PSL_APPROX_LOCATION
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      what: "IP-based geolocation, unless UseIpAddressForGeolocation is false"
+      condition: null
+    - type: PSL_USER_ACCOUNT
+      collected: true
+      shared: false
+      purposes: [PSL_ANALYTICS]
+      condition: "Only if you call identify() with your own user ID"
+
+# ---------------------------------------------------------------------- AI ---
+
+- id: openai-client
+  name: OpenAI client libraries
+  vendor: OpenAI / community
+  category: ai
+  match:
+    - com.aallam.openai:openai-client
+    - com.openai:openai-java
+  source: https://support.google.com/googleplay/android-developer/answer/10787469
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No vendor Play disclosure exists. The libraries send whatever the app puts in requests to
+    the OpenAI API. Commonly treated as a service provider (not shared); decide based on your
+    agreement with OpenAI. Calling the API straight from the app also ships your API key.
+  data:
+    - type: PSL_USER_GENERATED_CONTENT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user-written prompts or text"
+    - type: PSL_PHOTOS
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user images (vision input)"
+    - type: PSL_AUDIO
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends voice recordings (transcription, realtime audio)"
+    - type: PSL_FILES_AND_DOCS
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app uploads user files"
+
+- id: google-ai-client-sdk
+  name: Google AI client SDK for Android (Gemini API)
+  vendor: Google
+  category: ai
+  match:
+    - com.google.ai.client.generativeai:generativeai
+  source: https://support.google.com/googleplay/android-developer/answer/10787469
+  verified: 2026-10-26
+  confidence: inferred
+  notes: >-
+    No vendor Play disclosure exists for this SDK (Google recommends migrating to Firebase AI
+    Logic, which has one). It sends whatever the app puts in requests to the Gemini API.
+    Decide "shared" based on your Gemini API terms.
+  data:
+    - type: PSL_USER_GENERATED_CONTENT
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user-written prompts or text"
+    - type: PSL_PHOTOS
+      collected: true
+      shared: false
+      purposes: [PSL_APP_FUNCTIONALITY]
+      condition: "If the app sends user images"

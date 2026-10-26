@@ -1,0 +1,13 @@
+---
+title: Changelog
+description: Release notes for data-safety-from-code, the agent skill that generates the Google Play Data safety CSV from Android code.
+---
+
+## 0.1.0 (unreleased)
+
+- First version.
+- `scan.py`: manifests (including merged release manifests), Groovy and Kotlin DSL Gradle files, version catalogs and bundles, `./gradlew dependencies` output, network security config, plain-HTTP URLs, and 20 kinds of source signals.
+- `draft.py`, `fill_csv.py`, `validate.py`, `report.py`: a declaration becomes a CSV that keeps Google's template byte for byte; every conditional question is validated; the report links each answer to its evidence and lists changes against your current form.
+- Knowledge base: 21 SDK entries (12 from official vendor disclosure pages) and 29 permissions.
+- Tests: four fixture apps with golden CSVs, a byte-identical round trip of a real Play Console export, and validator failure cases.
+- This site, with a page for every SDK entry generated from the knowledge base.

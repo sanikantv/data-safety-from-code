@@ -1,0 +1,76 @@
+---
+title: "Firebase Analytics: Data safety form answers"
+description: "What Firebase Analytics collects for the Google Play Data safety form: device or other IDs, approximate location, app interactions. Purposes, sharing and the exact CSV rows."
+keywords:
+  - "firebase analytics data safety"
+  - "firebase analytics data safety form"
+  - "firebase analytics google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Google Analytics for Firebase** from Google, its data counts as data your app collects. According to the vendor, it collects device or other IDs, approximate location, app interactions (collected, not shared: the vendor acts as a service provider).
+
+Matched dependencies: `com.google.firebase:firebase-analytics`.
+
+<Aside type="tip" title="Source">From Google's own Play data disclosure: [support.google.com](https://support.google.com/analytics/answer/11582702). Checked 2026-10-26.</Aside>
+
+## What to declare
+
+| Data type | Collected | Shared | Ephemeral | Purposes |
+|---|---|---|---|---|
+| Device or other IDs | Yes | No | No | Analytics |
+| Approximate location <br/><small>Derived from the device's masked IP address</small> | Yes | No | No | Analytics |
+| App interactions <br/><small>App lifecycle events: screen views and sessions</small> | Yes | No | No | Analytics |
+
+Whether each type is **required or optional** for users depends on your app: optional only if users can turn it off and the app honors that.
+
+## Only declare these if they apply
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| Purchase history | Only if the app sells in-app products or subscriptions (purchase events are logged automatically) | Yes | No | Analytics |
+| User IDs | Only if you call setUserId, or enable Google Signals (signed-in account identifiers) | Yes | No | Analytics |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+Collects an app-instance ID and the Android Advertising ID automatically (ad ID collection can be disabled in Analytics configuration; app-instance ID via the Consent Mode API). Google Signals, linking Google Ads, and Data Sharing Settings can change what is collected and whether it counts as shared; if you link Google Ads or export audiences, also declare PSL_ADVERTISING and review "shared".
+
+## The CSV rows this sets
+
+These are the rows of Google's [Data safety CSV](/reference/csv-format/) that Firebase Analytics turns to `true` (or `false` for the ephemeral question). Columns: question ID, response ID, value. You also answer the required/optional row for each type.
+
+```csv
+PSL_DATA_TYPES_IDENTIFIERS,PSL_DEVICE_ID,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+PSL_DATA_TYPES_LOCATION,PSL_APPROX_LOCATION,true
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+PSL_DATA_TYPES_APP_ACTIVITY,PSL_USER_INTERACTION,true
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+```
+
+## Detect it automatically
+
+`data-safety-from-code` finds Firebase Analytics in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other analytics SDKs
+
+- [Firebase Performance Monitoring data safety](/sdk/firebase-perf/)
+- [Facebook SDK data safety](/sdk/facebook-sdk/)
+- [Mixpanel Android SDK data safety](/sdk/mixpanel-android/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

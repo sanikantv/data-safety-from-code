@@ -1,0 +1,10 @@
+{
+  "name": "data-safety-from-code",
+  "version": "0.1.0",
+  "description": "Generate the Google Play Data safety CSV from your Android code, with file:line evidence for every answer.",
+  "author": { "name": "Sanikant", "url": "https://sanikant.dev" },
+  "homepage": "https://datasafety.sanikant.dev",
+  "repository": "https://github.com/sanikantv/data-safety-from-code",
+  "license": "MIT",
+  "keywords": ["google-play", "data-safety", "play-console", "android", "privacy", "agent-skill"]
+}

@@ -1,0 +1,94 @@
+---
+title: Data Safety Form for an App That Collects No Data
+description: How to fill Google Play's Data safety form when your app collects no user data, what you still must provide, and the SDKs and features that quietly make "no data" untrue.
+keywords:
+  - data safety form for app that collects no data
+  - data safety no data collected
+  - offline app data safety form
+  - does my app collect data google play
+faq:
+  - q: Do I need to fill the Data safety form if my app collects no data?
+    a: Yes. Google says even developers whose apps collect no user data must complete the form and provide a privacy policy.
+  - q: What makes a "no data collected" answer wrong?
+    a: Anything that sends data off the device, including SDKs. Ads, analytics and crash reporting libraries, Firebase services, and network calls that include identifiers all count as collection.
+---
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+**Short answer:** you still have to complete the form and give a privacy policy URL. Answer
+**No** to "Does your app collect or share any of the required user data types?" and the data
+type and usage sections stay empty. That answer is only right if nothing, including any SDK,
+sends user data off the device.
+
+## What Google requires
+
+Google's [Data safety help page](https://support.google.com/googleplay/android-developer/answer/10787469)
+says apps that collect no user data must still complete the form. It also says a privacy policy
+is required to complete the form, and that the form and policy can say no data is collected or
+shared. Apps that are only on an internal testing track are exempt.
+
+## Steps
+
+1. **Confirm nothing leaves the device.** Check the checklist below.
+2. In Play Console, open **App content** and select **Start** under Data safety.
+3. Answer **No** to the collect-or-share question.
+4. Add your **privacy policy URL** in Play Console. Say plainly that the app collects and shares
+   no user data.
+5. Check the store listing preview, then submit.
+
+## What makes "no data" untrue
+
+Collection means data is sent off the device, by your code or by any SDK in the app. Check for:
+
+- **Ads SDKs.** AdMob's disclosure lists device or other IDs, approximate location, app
+  interactions and diagnostics, collected and shared.
+- **Analytics and crash reporting.** Firebase Analytics, Crashlytics, Sentry and similar SDKs
+  send identifiers, events or crash data.
+- **Firebase services pulled in indirectly.** Messaging, Performance Monitoring and Remote Config
+  depend on Firebase Installations, which sends an installation ID.
+- **On-device ML that still reports.** Google's ML Kit disclosure says its on-device APIs send
+  metadata such as device and app info and identifiers for diagnostics and usage analytics,
+  though not the images or text you process.
+- **In-app purchases** that your app or a service verifies or stores off the device: purchase
+  history.
+- **Any HTTP call** that carries user input, identifiers or location.
+- **A WebView** that loads your own pages with analytics on them.
+- **Sign-in.** If users can create an account, the app collects at least an account ID.
+
+What does **not** count: data kept in a local database, files or preferences, and data processed
+only on the device.
+
+## CSV IDs
+
+- `PSL_DATA_COLLECTION_COLLECTS_PERSONAL_DATA`: set to false.
+- Every `PSL_DATA_TYPES_*` row and every `PSL_DATA_USAGE_RESPONSES:*` row stays blank.
+- If your app has no accounts, `PSL_ACM_NONE` under `PSL_SUPPORTED_ACCOUNT_CREATION_METHODS` is
+  the matching choice.
+
+A CSV that says no data is collected but selects a data type contradicts itself.
+
+## Common mistakes
+
+- **Skipping the form** because the app is offline. It is still required.
+- **No privacy policy** because "there's nothing to put in it". Google requires one.
+- **Forgetting a library.** A single analytics or crash SDK means the app collects data.
+- **Only checking direct dependencies.** Libraries can bring in other SDKs. Run
+  `./gradlew :app:dependencies` to see the full tree.
+- **Declaring data because of a permission.** A permission alone doesn't mean collection. If the
+  permission isn't needed, remove it.
+
+## With data-safety-from-code
+
+The skill checks the release build's dependencies, permissions and source for anything that
+sends data, and lists any library it doesn't recognize for you to review. If it finds nothing,
+the draft says no data is collected, and the report lists what code can't show, such as what a
+WebView loads or what older versions did. It is a draft for your review.
+[Get started](/getting-started/).
+
+## Related
+
+- [How to fill the Data safety form](/guides/how-to-fill-data-safety-form/)
+- [Collected vs shared](/guides/collected-vs-shared/)
+- [Firebase Analytics](/sdk/firebase-analytics/)
+- [AdMob](/sdk/admob/)
+
+<GuideEnd />

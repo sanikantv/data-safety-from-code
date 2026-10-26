@@ -1,0 +1,19 @@
+{
+  "name": "data-safety-from-code",
+  "owner": { "name": "Sanikant" },
+  "metadata": {
+    "description": "Google Play Data safety form from your Android code",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "data-safety-from-code",
+      "source": "./",
+      "description": "Scan an Android codebase and generate the Play Console Data safety CSV, with an evidence report for every answer.",
+      "version": "0.1.0",
+      "author": { "name": "Sanikant" },
+      "category": "development",
+      "keywords": ["google-play", "data-safety", "play-console", "android", "privacy", "agent-skill"]
+    }
+  ]
+}

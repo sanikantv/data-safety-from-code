@@ -1,0 +1,92 @@
+---
+title: How to Export the Data Safety Form as a CSV
+description: Export your Google Play Data safety form to CSV from Play Console, read what each column means, and use the file as a backup, a diff baseline and an up-to-date template.
+keywords:
+  - how to export data safety form csv
+  - export data safety csv play console
+  - data safety csv template
+  - download data safety form
+faq:
+  - q: How do I export the Data safety form?
+    a: In Play Console, open the App content page, select Start under Data safety, then select Export to CSV near the top right of the page.
+  - q: Can I read the Data safety form through the Play Developer API?
+    a: No read method is documented. The applications.dataSafety method only writes a declaration, so exporting from Play Console is the way to get your current answers.
+---
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+**Short answer:** in Play Console, open **App content**, select **Start** under Data safety, then
+select **Export to CSV** near the top right. You get your current answers in Google's
+machine-readable format. The same file is the most up-to-date template you can get, because it
+always has the current set of questions.
+
+## Steps
+
+1. Open your app in Play Console.
+2. Go to the **App content** page.
+3. Under "Data safety", select **Start**.
+4. Near the top right, select **Export to CSV**.
+
+Google's help page also offers a sample CSV to download, if you want to work offline.
+
+There is no API alternative for this step. The Play Developer API's
+[applications.dataSafety](https://developers.google.com/android-publisher/api-ref/rest/v3/applications/dataSafety)
+method only writes a declaration, it doesn't return one.
+
+## Why export
+
+- **Backup.** [Importing a CSV](/guides/import-data-safety-csv/) overwrites every answer in the
+  form. Keep the export so you can go back.
+- **An up-to-date template.** If Google adds or renames a question, a fresh export has it. A
+  file saved months ago may not.
+- **A baseline to compare against.** Diff your next draft against the export to see exactly
+  which answers change before you submit.
+- **A record.** Keep the file next to your release notes or in version control, so you know what
+  you declared for each release.
+
+## Reading the export
+
+Each row is one response, with five columns:
+
+| Column | What it holds |
+|---|---|
+| Question ID (machine readable) | The question, e.g. `PSL_DATA_TYPES_LOCATION` |
+| Response ID (machine readable) | The option, e.g. `PSL_APPROX_LOCATION`. Blank for yes/no and text questions |
+| Response value | Your answer: true, false, blank, or text for URL rows |
+| Answer requirement | `REQUIRED`, `MAYBE_REQUIRED`, `OPTIONAL`, `SINGLE_CHOICE` or `MULTIPLE_CHOICE` |
+| Human-friendly question label | The question as Play Console shows it |
+
+Usage questions for a data type have the type inside the question ID. For approximate location,
+the "collected, shared, or both" rows look like this:
+
+```csv
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true,MULTIPLE_CHOICE,"Data usage and handling (Approximate location) / Is this data collected, shared, or both? / Collected"
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_SHARED,,MULTIPLE_CHOICE,"Data usage and handling (Approximate location) / Is this data collected, shared, or both? / Shared"
+```
+
+Every ID in the file is explained in the [CSV format reference](/reference/csv-format/).
+
+## Common mistakes
+
+- **Exporting from the wrong app.** Each app has its own form, tied to its package name. Check
+  the app name at the top of Play Console before you export.
+- **Reusing an old export as a template** after Google changed the questions. Export again
+  before each update.
+- **Opening the file in a spreadsheet and saving it back** in another format. If you edit it,
+  keep it as plain CSV and leave the ID columns alone.
+- **Treating the export as proof the answers are right.** It only shows what you declared, not
+  what the app does.
+
+## With data-safety-from-code
+
+The skill asks for your export first and uses it three ways: as the template it fills, as the
+source for answers code can't show, and as the baseline for a "what changed" section in its
+report. Without an export it falls back to a bundled copy of Google's template and tells you
+so. [Get started](/getting-started/).
+
+## Related
+
+- [Import a Data safety CSV](/guides/import-data-safety-csv/)
+- [How to fill the Data safety form](/guides/how-to-fill-data-safety-form/)
+- [How the skill works](/how-it-works/)
+
+<GuideEnd />

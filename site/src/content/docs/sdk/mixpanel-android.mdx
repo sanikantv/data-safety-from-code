@@ -1,0 +1,75 @@
+---
+title: "Mixpanel Android SDK: Data safety form answers"
+description: "What Mixpanel Android SDK collects for the Google Play Data safety form: app interactions, device or other IDs, approximate location. Purposes, sharing and the exact CSV rows."
+keywords:
+  - "mixpanel android sdk data safety"
+  - "mixpanel android sdk data safety form"
+  - "mixpanel android sdk google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Mixpanel Android SDK** from Mixpanel, its data counts as data your app collects. Based on what the SDK does, it collects app interactions, device or other IDs, approximate location (collected, not shared: the vendor acts as a service provider).
+
+Matched dependencies: `com.mixpanel.android:mixpanel-android`.
+
+<Aside type="caution" title="No official vendor disclosure">This entry is inferred from the SDK's behavior and Google's definitions, not from a vendor data-safety page (see [source](https://docs.mixpanel.com/docs/tracking-methods/sdks/android), checked 2026-10-26). Check it against your own use of the SDK.</Aside>
+
+## What to declare
+
+| Data type | Collected | Shared | Ephemeral | Purposes |
+|---|---|---|---|---|
+| App interactions | Yes | No | No | Analytics |
+| Device or other IDs | Yes | No | No | Analytics |
+| Approximate location <br/><small>IP-based geolocation, unless UseIpAddressForGeolocation is false</small> | Yes | No | No | Analytics |
+
+Whether each type is **required or optional** for users depends on your app: optional only if users can turn it off and the app honors that.
+
+## Only declare these if they apply
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| User IDs | Only if you call identify() with your own user ID | Yes | No | Analytics |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+No Mixpanel Play Data safety page was found; inferred from the Android SDK docs. The SDK assigns a device ID / distinct_id, sends the events you track (and autocapture clicks if enabled), and geolocates from the request IP unless UseIpAddressForGeolocation=false. optOutTracking() can stop collection; declare event properties you add yourself.
+
+## The CSV rows this sets
+
+These are the rows of Google's [Data safety CSV](/reference/csv-format/) that Mixpanel Android SDK turns to `true` (or `false` for the ephemeral question). Columns: question ID, response ID, value. You also answer the required/optional row for each type.
+
+```csv
+PSL_DATA_TYPES_APP_ACTIVITY,PSL_USER_INTERACTION,true
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_USER_INTERACTION:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+PSL_DATA_TYPES_IDENTIFIERS,PSL_DEVICE_ID,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+PSL_DATA_TYPES_LOCATION,PSL_APPROX_LOCATION,true
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+```
+
+## Detect it automatically
+
+`data-safety-from-code` finds Mixpanel Android SDK in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other analytics SDKs
+
+- [Firebase Analytics data safety](/sdk/firebase-analytics/)
+- [Firebase Performance Monitoring data safety](/sdk/firebase-perf/)
+- [Facebook SDK data safety](/sdk/facebook-sdk/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

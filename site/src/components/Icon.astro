@@ -1,0 +1,13 @@
+---
+// A Material Symbols Rounded icon. scripts/fetch-icons.mjs subsets the font to every `name` used.
+interface Props {
+  name: string;
+  size?: number;
+  fill?: boolean;
+  class?: string;
+}
+const { name, size, fill, class: cls } = Astro.props;
+const style = [size && `font-size:${size}px`, fill && `font-variation-settings:'FILL' 1`].filter(Boolean).join(';');
+---
+
+<span class:list={['msr', cls]} aria-hidden="true" style={style || undefined}>{name}</span>

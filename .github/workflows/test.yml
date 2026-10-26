@@ -1,0 +1,30 @@
+# Runs the skill's scripts against the fixture apps and checks the knowledge base on every push.
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.9", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install PyYAML (knowledge base check only)
+        run: pip install pyyaml
+      - name: Knowledge base is compiled and every ID exists in the template
+        run: python skills/data-safety-from-code/scripts/build_knowledge.py --check
+      - name: Tests
+        run: python -m unittest discover tests -v

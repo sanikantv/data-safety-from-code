@@ -1,0 +1,86 @@
+---
+title: Get started with data-safety-from-code
+description: Install the data-safety-from-code skill in Claude Code, Codex, Cursor or Copilot, run it on your Android project, and import the CSV in Play Console.
+keywords:
+  - generate data safety form from code
+  - data safety claude code skill
+  - ai data safety form android
+---
+
+import Install from '../../components/Install.astro';
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+## Requirements
+
+- An Android project (Kotlin or Java; Groovy or Kotlin DSL Gradle; version catalogs are supported).
+- Python 3.9 or newer. The scripts use only the standard library.
+- An agent that reads `SKILL.md` skills: Claude Code, Codex, Cursor, GitHub Copilot and others.
+- Optional: access to the app in Play Console, to export your current form.
+
+## Install
+
+<Install />
+
+## Run it
+
+<Steps>
+
+1. **Export your current form** (recommended). Play Console → your app → **App content → Data safety** → **Export to CSV**. This gives the skill Google's latest template and your current answers, and it's your backup: importing replaces the whole form.
+
+2. **Ask your agent**, from the root of your Android project:
+
+   ```text
+   /data-safety-from-code fill the Data safety form for this app. My current export is ~/Downloads/data_safety_export.csv
+   ```
+
+   Without the slash command, "fill our Google Play Data safety form" works too.
+
+3. **Let it scan.** The agent runs `scan.py` and may offer to run `./gradlew :app:dependencies` to catch SDKs that come in transitively. It then reads the code paths the scan flags.
+
+4. **Answer its questions.** Only what code can't show: your privacy policy URL, how users create accounts, whether they can request deletion, whether your backend shares data, and which data is optional.
+
+5. **Review the report.** Open `data-safety/data_safety_report.md`. Each data type lists its evidence, and *Needs your review* lists what the agent couldn't decide alone. Correct anything wrong and ask the agent to run it again.
+
+6. **Import.** Play Console → **App content → Data safety → Import to CSV** → choose `data-safety/data_safety.csv`. Check the preview, save, then submit.
+
+</Steps>
+
+<Aside type="caution">
+The CSV is a draft for you to review. Google holds the developer responsible for the Data safety declaration. Read [why the form gets rejected](/guides/data-safety-form-rejected/) before you submit.
+</Aside>
+
+## What it writes
+
+All files go in a `data-safety/` folder in your project:
+
+| File | What it is |
+|---|---|
+| `findings.json` | Everything the scan found, with file:line for each item |
+| `answers.json` | Your answers and the agent's decisions, each with a reason |
+| `declaration.json` | The form as JSON, with the evidence behind every answer |
+| `data_safety.csv` | The file to import in Play Console |
+| `data_safety_report.md` | The review report: evidence, open questions, changes vs your current form |
+
+Add `data-safety/` to `.gitignore` if you don't want it committed, or keep it: it documents why each answer was given.
+
+## Run the scripts yourself
+
+The agent runs these for you, but you can run them by hand or in CI. `<skill>` is the installed skill folder.
+
+```bash
+python3 <skill>/scripts/scan.py . -o data-safety/findings.json
+python3 <skill>/scripts/draft.py data-safety/findings.json --answers data-safety/answers.json \
+  --current data-safety/current.csv -o data-safety/declaration.json
+python3 <skill>/scripts/fill_csv.py data-safety/declaration.json --template data-safety/current.csv \
+  -o data-safety/data_safety.csv
+python3 <skill>/scripts/validate.py data-safety/data_safety.csv --template data-safety/current.csv
+python3 <skill>/scripts/report.py data-safety/findings.json data-safety/declaration.json \
+  --current data-safety/current.csv -o data-safety/data_safety_report.md
+```
+
+## Next
+
+- [How it works, step by step](/how-it-works/)
+- [The CSV format and every question ID](/reference/csv-format/)
+- [The definitions the agent follows](/reference/definitions/)
+- [SDK pages](/sdk/): what each SDK makes you declare

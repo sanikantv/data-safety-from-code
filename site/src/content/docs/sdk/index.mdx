@@ -1,0 +1,64 @@
+---
+title: Data safety answers for Android SDKs
+description: What Firebase, AdMob, RevenueCat, OneSignal, Sentry, Mixpanel and other Android SDKs collect for the Google Play Data safety form, with sources.
+keywords:
+  - "android sdk data safety"
+  - "sdk data safety form google play"
+  - "third party sdk data safety"
+tableOfContents: false
+---
+
+Most data an Android app collects comes from its SDKs. Each page below lists what one SDK collects or shares for Google Play's Data safety form, and the exact CSV rows it sets. 13 of the 21 entries come from the vendor's own Play data disclosure; the rest are marked as inferred.
+
+Missing an SDK? Entries live in [`knowledge/sdks.yaml`](https://github.com/sanikantv/data-safety-from-code/blob/main/skills/data-safety-from-code/knowledge/sdks.yaml): open a pull request with a link to the vendor's disclosure page.
+
+## Analytics
+
+- [**Firebase Analytics**](/sdk/firebase-analytics/): Device or other IDs, Approximate location, App interactions
+- [**Firebase Performance Monitoring**](/sdk/firebase-perf/): Diagnostics, Device or other IDs
+- [**Facebook SDK**](/sdk/facebook-sdk/): App interactions, Device or other IDs, Crash logs (inferred)
+- [**Mixpanel Android SDK**](/sdk/mixpanel-android/): App interactions, Device or other IDs, Approximate location (inferred)
+
+## Crash reporting
+
+- [**Firebase Crashlytics**](/sdk/firebase-crashlytics/): Crash logs, Diagnostics, Device or other IDs
+- [**Sentry Android SDK**](/sdk/sentry-android/): Crash logs, Diagnostics, Device or other IDs (inferred)
+
+## Sign-in
+
+- [**Firebase Authentication**](/sdk/firebase-auth/): User IDs
+- [**Sign in with Google / Credential Manager**](/sdk/google-sign-in/): depends on your use (inferred)
+
+## Database
+
+- [**Cloud Firestore**](/sdk/firebase-firestore/): depends on your use
+
+## Messaging and notifications
+
+- [**Firebase Cloud Messaging**](/sdk/firebase-messaging/): Device or other IDs
+- [**OneSignal Android SDK**](/sdk/onesignal/): App interactions
+
+## Other
+
+- [**Firebase Remote Config**](/sdk/firebase-remote-config/): Device or other IDs
+- [**Firebase Installations**](/sdk/firebase-installations/): Device or other IDs
+
+## Generative AI
+
+- [**Firebase AI Logic**](/sdk/firebase-ai-logic/): depends on your use
+- [**OpenAI client libraries**](/sdk/openai-client/): depends on your use (inferred)
+- [**Gemini API (Google AI client SDK)**](/sdk/google-ai-client-sdk/): depends on your use (inferred)
+
+## Ads
+
+- [**AdMob**](/sdk/admob/): Approximate location, App interactions, Diagnostics, Device or other IDs
+- [**Google UMP SDK**](/sdk/user-messaging-platform/): depends on your use (inferred)
+
+## Payments
+
+- [**RevenueCat**](/sdk/revenuecat/): Purchase history
+- [**Google Play Billing Library**](/sdk/play-billing/): depends on your use (inferred)
+
+## Machine learning
+
+- [**ML Kit**](/sdk/ml-kit/): Device or other IDs, Diagnostics

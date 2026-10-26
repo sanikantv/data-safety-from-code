@@ -1,0 +1,36 @@
+---
+title: "Google UMP SDK: Data safety form answers"
+description: "How to declare Google UMP SDK in the Google Play Data safety form: what it can collect, when it applies, and the CSV rows to set."
+keywords:
+  - "google ump sdk data safety"
+  - "google ump sdk data safety form"
+  - "google ump sdk google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Google User Messaging Platform (UMP) SDK** from Google, its data counts as data your app collects. What it collects depends on how you use it, so each data type below has a condition.
+
+Matched dependencies: `com.google.android.ump:user-messaging-platform`.
+
+<Aside type="caution" title="No official vendor disclosure">This entry is inferred from the SDK's behavior and Google's definitions, not from a vendor data-safety page (see [source](https://developers.google.com/admob/android/privacy/play-data-disclosure), checked 2026-10-26). Check it against your own use of the SDK.</Aside>
+
+## Notes
+
+No vendor Play disclosure for UMP was found; the AdMob page only links to it. UMP is normally used alongside the Google Mobile Ads SDK, whose disclosure covers the ads data. No data types are listed here; verify before relying on this.
+
+## Detect it automatically
+
+`data-safety-from-code` finds Google UMP SDK in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other ads SDKs
+
+- [AdMob data safety](/sdk/admob/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

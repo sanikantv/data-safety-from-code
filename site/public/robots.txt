@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://datasafety.sanikant.dev/sitemap-index.xml

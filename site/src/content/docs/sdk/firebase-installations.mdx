@@ -1,0 +1,54 @@
+---
+title: "Firebase Installations: Data safety form answers"
+description: "What Firebase Installations collects for the Google Play Data safety form: device or other IDs. Purposes, sharing and the exact CSV rows."
+keywords:
+  - "firebase installations data safety"
+  - "firebase installations data safety form"
+  - "firebase installations google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Firebase Installations** from Google, its data counts as data your app collects. According to the vendor, it collects device or other IDs (collected, not shared: the vendor acts as a service provider).
+
+Matched dependencies: `com.google.firebase:firebase-installations`.
+
+<Aside type="tip" title="Source">From Google's own Play data disclosure: [firebase.google.com](https://firebase.google.com/docs/android/play-data-disclosure). Checked 2026-10-26.</Aside>
+
+## What to declare
+
+| Data type | Collected | Shared | Ephemeral | Purposes |
+|---|---|---|---|---|
+| Device or other IDs | Yes | No | No | Not stated by the vendor: choose yours |
+
+Whether each type is **required or optional** for users depends on your app: optional only if users can turn it off and the app honors that.
+
+## Notes
+
+Collects the Firebase installation ID (FID), a per-installation identifier that Google says does not uniquely identify a user or device, plus the Firebase user agent. Usually pulled in transitively by Messaging, Crashlytics, Performance and Remote Config. The page does not state a purpose.
+
+## The CSV rows this sets
+
+These are the rows of Google's [Data safety CSV](/reference/csv-format/) that Firebase Installations turns to `true` (or `false` for the ephemeral question). Columns: question ID, response ID, value. You also answer the required/optional row for each type.
+
+```csv
+PSL_DATA_TYPES_IDENTIFIERS,PSL_DEVICE_ID,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_EPHEMERAL,,false
+```
+
+## Detect it automatically
+
+`data-safety-from-code` finds Firebase Installations in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other other SDKs
+
+- [Firebase Remote Config data safety](/sdk/firebase-remote-config/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

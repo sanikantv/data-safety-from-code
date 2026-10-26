@@ -1,0 +1,46 @@
+---
+title: "Sign in with Google / Credential Manager: Data safety form answers"
+description: "How to declare Sign in with Google / Credential Manager in the Google Play Data safety form: what it can collect, when it applies, and the CSV rows to set."
+keywords:
+  - "sign in with google / credential manager data safety"
+  - "sign in with google / credential manager data safety form"
+  - "sign in with google / credential manager google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Sign in with Google / Credential Manager** from Google, its data counts as data your app collects. What it collects depends on how you use it, so each data type below has a condition.
+
+Matched dependencies: `com.google.android.gms:play-services-auth`, `androidx.credentials:credentials`, `com.google.android.libraries.identity.googleid:googleid`.
+
+<Aside type="caution" title="No official vendor disclosure">This entry is inferred from the SDK's behavior and Google's definitions, not from a vendor data-safety page (see [source](https://developers.google.com/android/guides/play-data-disclosure), checked 2026-10-26). Check it against your own use of the SDK.</Aside>
+
+## What it can collect
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| Name | If the app sends the profile or ID token off-device | Yes | No | App functionality; Account management |
+| Email address | If the app sends the profile or ID token off-device | Yes | No | App functionality; Account management |
+| User IDs | If the app sends the Google account ID or ID token off-device | Yes | No | App functionality; Account management |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+No vendor Play disclosure for these libraries was found (the Play services page covers only base, basement, oss-licenses and tasks). The sign-in flow returns the user's name, email and Google account ID to the app; declare them only if the app sends them (or the ID token) off-device, e.g. to its own backend.
+
+## Detect it automatically
+
+`data-safety-from-code` finds Sign in with Google / Credential Manager in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other sign-in SDKs
+
+- [Firebase Authentication data safety](/sdk/firebase-auth/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

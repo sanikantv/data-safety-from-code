@@ -1,0 +1,371 @@
+/* Starlight dressed as a Material 3 site. Tokens live in tokens.css and springs.css. */
+
+body {
+  background: var(--md-surface);
+}
+
+/* Material Symbols */
+.msr {
+  font-family: 'Material Symbols Rounded';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* ---------- Type: Google Sans Flex at normal width, same as paywall.sanikant.dev ---------- */
+.sl-markdown-content :is(h1, h2, h3),
+.hero-m3 h1 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.sl-markdown-content a:not(.md-btn):not(.md-card) {
+  color: var(--md-primary);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.sl-markdown-content :not(pre) > code:not(:where(.not-content code)) {
+  background: var(--md-surface-container-high);
+  border: 0;
+  border-radius: var(--md-shape-sm);
+  padding: 0.12em 0.4em;
+  font-size: 0.9em;
+}
+
+/* ---------- Top app bar ---------- */
+header.header {
+  background: var(--md-surface);
+  border-bottom: 0;
+  padding-inline: 1rem;
+}
+.site-title {
+  font-weight: 600;
+  color: var(--md-on-surface);
+  gap: 0.6rem;
+}
+.site-title img {
+  height: 2.25rem;
+  width: auto;
+}
+site-search button[data-open-modal] {
+  border-radius: var(--md-shape-full);
+  background: var(--md-surface-container-high);
+  border: 0;
+  min-height: 3rem;
+  padding-inline: 1.1rem;
+  color: var(--md-on-surface-variant);
+  transition: background-color var(--md-spring-default-effects-ms) var(--md-spring-default-effects);
+}
+site-search button[data-open-modal]:hover {
+  background: var(--md-surface-container-highest);
+  border: 0;
+}
+site-search button[data-open-modal] kbd {
+  background: transparent;
+  border-radius: var(--md-shape-sm);
+}
+starlight-theme-select select,
+starlight-theme-select label {
+  border-radius: var(--md-shape-full);
+}
+
+/* ---------- Navigation drawer ---------- */
+.sidebar-pane {
+  background: var(--md-surface);
+  border-inline-end: 0;
+}
+.sidebar-content {
+  padding-inline: 0.75rem;
+}
+.sidebar-content a {
+  border-radius: var(--md-shape-full);
+  padding: 0.55rem 1rem;
+  color: var(--md-on-surface-variant);
+  transition:
+    background-color var(--md-spring-default-effects-ms) var(--md-spring-default-effects),
+    border-radius var(--md-spring-expressive-fast-spatial-ms) var(--md-spring-expressive-fast-spatial);
+}
+.sidebar-content a:hover {
+  background: var(--md-surface-container-high);
+  color: var(--md-on-surface);
+}
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover {
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  font-weight: 700;
+}
+.sidebar-content summary {
+  border-radius: var(--md-shape-full);
+  padding-inline: 1rem;
+}
+.sidebar-content .group-label .large {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--md-on-surface-variant);
+}
+.sidebar-content ul ul {
+  border-inline-start: 0;
+}
+
+/* ---------- Content containers ---------- */
+.main-frame .main-pane {
+  background: var(--md-surface);
+}
+.sl-markdown-content table {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--md-shape-lg-inc);
+  overflow: hidden;
+  background: var(--md-surface-container-low);
+  font-size: 0.95rem;
+}
+.sl-markdown-content :is(th, td) {
+  border-bottom: 1px solid var(--md-outline-variant);
+  padding: 0.7rem 0.9rem;
+}
+.sl-markdown-content th {
+  background: var(--md-surface-container-high);
+  font-weight: 700;
+  border-bottom: 0;
+}
+.sl-markdown-content tr:last-child td {
+  border-bottom: 0;
+}
+@media (max-width: 50rem) {
+  .sl-markdown-content table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+.starlight-aside {
+  border: 0;
+  border-radius: var(--md-shape-lg-inc);
+  padding: 1rem 1.25rem;
+}
+.starlight-aside--note {
+  background: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+}
+.starlight-aside--tip {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+}
+.starlight-aside--caution {
+  background: var(--md-tertiary-container);
+  color: var(--md-on-tertiary-container);
+}
+.starlight-aside :is(.starlight-aside__title, .starlight-aside__icon) {
+  color: inherit;
+  fill: currentColor;
+}
+.expressive-code .frame {
+  box-shadow: none;
+}
+.pagination-links a {
+  border-radius: var(--md-shape-xl);
+  border: 0;
+  background: var(--md-surface-container-low);
+  box-shadow: none;
+}
+.pagination-links a:hover {
+  background: var(--md-surface-container-high);
+}
+starlight-tabs [role='tablist'] {
+  border-bottom-color: var(--md-outline-variant);
+}
+starlight-tabs [role='tab'][aria-selected='true'] {
+  color: var(--md-primary);
+  border-color: var(--md-primary);
+}
+
+/* ---------- Buttons: pill at rest, squarer when pressed (the M3 Expressive press morph) ---------- */
+.md-btn {
+  --btn-bg: var(--md-primary);
+  --btn-fg: var(--md-on-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3.5rem;
+  padding: 0 1.6rem;
+  border-radius: var(--md-shape-full);
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  font-weight: 600;
+  font-size: 1.05rem;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  isolation: isolate;
+  transition: border-radius var(--md-spring-expressive-fast-spatial-ms) var(--md-spring-expressive-fast-spatial);
+}
+.md-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity var(--md-spring-default-effects-ms) var(--md-spring-default-effects);
+}
+.md-btn:hover::after {
+  opacity: 0.08;
+}
+.md-btn:active {
+  border-radius: var(--md-shape-md);
+}
+.md-btn:active::after {
+  opacity: 0.12;
+}
+.md-btn:focus-visible {
+  outline: 3px solid var(--md-primary);
+  outline-offset: 3px;
+}
+.md-btn .msr {
+  font-size: 1.35em;
+}
+.md-btn.tonal {
+  --btn-bg: var(--md-secondary-container);
+  --btn-fg: var(--md-on-secondary-container);
+}
+.md-btn.outlined {
+  --btn-bg: transparent;
+  --btn-fg: var(--md-on-surface-variant);
+  box-shadow: inset 0 0 0 1px var(--md-outline-variant);
+}
+.md-btn.small {
+  min-height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.9rem;
+}
+.md-btn.small:active {
+  border-radius: var(--md-shape-sm);
+}
+
+/* ---------- Cards ---------- */
+.md-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+.md-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  border-radius: var(--md-shape-xl);
+  background: var(--md-surface-container-low);
+  color: var(--md-on-surface);
+  text-decoration: none;
+  transition:
+    border-radius var(--md-spring-expressive-default-spatial-ms) var(--md-spring-expressive-default-spatial),
+    background-color var(--md-spring-default-effects-ms) var(--md-spring-default-effects);
+}
+a.md-card:hover,
+a.md-card:focus-visible {
+  background: var(--md-surface-container-high);
+  border-radius: var(--md-shape-xl-inc) var(--md-shape-md) var(--md-shape-xl-inc) var(--md-shape-md);
+}
+.md-card .msr {
+  font-size: 28px;
+  color: var(--md-primary);
+}
+.md-card strong {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.4rem;
+}
+.md-card span:not(.msr) {
+  color: var(--md-on-surface-variant);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Chips used for API status */
+.md-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border-radius: var(--md-shape-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.md-chip.stable {
+  background: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+}
+.md-chip.optin {
+  background: var(--md-tertiary-container);
+  color: var(--md-on-tertiary-container);
+}
+.md-chip.internal {
+  background: var(--md-surface-container-highest);
+  color: var(--md-on-surface-variant);
+}
+.md-chip .msr {
+  font-size: 18px;
+}
+
+.star-line {
+  margin-top: 2.5rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--md-shape-lg-inc);
+  background: var(--md-surface-container-low);
+  font-size: var(--sl-text-sm);
+  color: var(--md-on-surface-variant);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ---------- Home page (splash) ---------- */
+/* The title panel is empty there (Hero.astro renders the H1), so drop it and its divider. */
+.content-panel:has(> .sl-container:empty) {
+  display: none;
+}
+.content-panel:has(> .sl-container:empty) + .content-panel {
+  border-top: 0;
+}
+/* Wider canvas for the landing page only. */
+body:has(.hero-m3) {
+  --sl-content-width: 74rem;
+}
+body:has(.hero-m3) .sl-markdown-content > h2 {
+  margin-top: 4.5rem;
+}
+.landing-demos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+.landing-demos .demo {
+  margin: 0;
+}

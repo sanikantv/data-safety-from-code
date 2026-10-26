@@ -1,0 +1,9 @@
+[versions]
+playServicesAds = "24.7.0"
+composeBom = "2025.10.00"
+
+[libraries]
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+junit = "junit:junit:4.13.2"

@@ -1,0 +1,233 @@
+---
+// Home page hero: the page's only H1, the install line, and a CSV preview where every row cites its evidence.
+import Icon from './Icon.astro';
+import { REPO, REPO_SLUG, SKILL } from '../lib/site';
+
+const npx = `npx skills add ${REPO_SLUG} --skill ${SKILL}`;
+const rows = [
+  { icon: 'smartphone', type: 'Device or other IDs', id: 'PSL_DEVICE_ID', ev: 'play-services-ads', where: 'build.gradle.kts:17', shared: true },
+  { icon: 'bug_report', type: 'Crash logs', id: 'PSL_CRASH_LOGS', ev: 'firebase-crashlytics', where: 'libs.versions.toml:12', shared: false },
+  { icon: 'location_on', type: 'Approximate location', id: 'PSL_APPROX_LOCATION', ev: 'sent to your weather API', where: 'WeatherRepo.kt:42', shared: false },
+];
+---
+
+<section class="hero-ds not-content">
+  <div class="hero-copy">
+    <p class="hero-eyebrow"><Icon name="verified_user" size={18} fill /> Open-source agent skill for Android apps</p>
+    <h1 id="_top">Google Play Data safety form, <span class="hero-emph">filled from your code</span></h1>
+    <p class="hero-lead">
+      Your agent scans the manifest, Gradle files and source, matches every SDK against its vendor's disclosure, and
+      writes the CSV that Play Console imports. Each answer comes with the file and line that justify it.
+    </p>
+    <div class="hero-actions">
+      <a class="md-btn" href="/getting-started/"><Icon name="rocket_launch" /> Get started</a>
+      <a class="md-btn tonal" href={REPO}><Icon name="code" /> View on GitHub</a>
+    </div>
+    <button class="hero-install" type="button" data-copy={npx} aria-label={`Copy install command: ${npx}`}>
+      <Icon name="terminal" size={20} />
+      <code>{npx}</code>
+      <Icon name="content_copy" size={20} class="copy-icon" />
+      <Icon name="check" size={20} class="done-icon" />
+    </button>
+  </div>
+  <figure class="hero-csv" aria-label="Example: three rows of a generated data_safety.csv with their evidence">
+    <figcaption><Icon name="table_view" size={20} /> data_safety.csv <span class="hero-draft">Draft for review</span></figcaption>
+    <ul>
+      {
+        rows.map((r) => (
+          <li>
+            <span class="hero-row-icon">
+              <Icon name={r.icon} size={22} />
+            </span>
+            <span class="hero-row-text">
+              <strong>{r.type}</strong>
+              <code>{r.id}</code>
+              <span class="hero-ev">
+                <Icon name="link" size={16} /> {r.ev} · <code>{r.where}</code>
+              </span>
+            </span>
+            <span class={r.shared ? 'hero-badge shared' : 'hero-badge'}>{r.shared ? 'Collected + shared' : 'Collected'}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </figure>
+</section>
+
+<style>
+  .hero-ds {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 4vw, 3rem) clamp(1.25rem, 4vw, 3rem);
+    margin-bottom: 2rem;
+    border-radius: var(--md-shape-xxl);
+    background: var(--md-surface-container-low);
+  }
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0 0 1rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--md-shape-full);
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .hero-ds h1 {
+    margin: 0;
+    font-size: clamp(2.3rem, 5.2vw, 4rem);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--md-on-surface);
+  }
+  .hero-emph {
+    color: var(--md-primary);
+  }
+  .hero-lead {
+    margin: 1.25rem 0 0;
+    font-size: 1.15rem;
+    line-height: 1.6;
+    color: var(--md-on-surface-variant);
+    max-width: 36rem;
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .hero-install {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    max-width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+    border: 0;
+    border-radius: var(--md-shape-lg);
+    background: var(--md-surface-container-highest);
+    color: var(--md-on-surface);
+    cursor: pointer;
+    font: inherit;
+    text-align: start;
+  }
+  .hero-install code {
+    font-size: 0.85rem;
+    background: none;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+  .hero-install .done-icon,
+  .hero-install[data-copied] .copy-icon {
+    display: none;
+  }
+  .hero-install[data-copied] .done-icon {
+    display: inline-block;
+    color: var(--md-primary);
+  }
+  .hero-csv {
+    margin: 0;
+    padding: 1.25rem;
+    border-radius: var(--md-shape-xl);
+    background: var(--md-surface-container-lowest);
+    border: 1px solid var(--md-outline-variant);
+  }
+  .hero-csv figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 0.25rem 0.9rem;
+    border-bottom: 1px solid var(--md-outline-variant);
+    font-weight: 700;
+    color: var(--md-on-surface);
+  }
+  .hero-draft {
+    margin-inline-start: auto;
+    padding: 0.2rem 0.6rem;
+    border-radius: var(--md-shape-full);
+    background: var(--md-tertiary-container);
+    color: var(--md-on-tertiary-container);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .hero-csv ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-csv li {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 0.9rem 0.25rem;
+  }
+  .hero-csv li + li {
+    border-top: 1px solid var(--md-outline-variant);
+  }
+  .hero-row-icon {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: var(--md-shape-md);
+    background: var(--md-primary-container);
+    color: var(--md-on-primary-container);
+  }
+  .hero-row-text {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+    color: var(--md-on-surface);
+  }
+  .hero-row-text code {
+    font-size: 0.75rem;
+    color: var(--md-on-surface-variant);
+    background: none;
+    padding: 0;
+    overflow-wrap: anywhere;
+  }
+  .hero-ev {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: var(--md-primary);
+  }
+  .hero-ev code {
+    color: var(--md-primary);
+  }
+  .hero-badge {
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--md-shape-sm);
+    background: var(--md-secondary-container);
+    color: var(--md-on-secondary-container);
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .hero-badge.shared {
+    background: var(--md-tertiary-container);
+    color: var(--md-on-tertiary-container);
+  }
+  @media (max-width: 60rem) {
+    .hero-ds {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 30rem) {
+    .hero-csv li {
+      grid-template-columns: auto 1fr;
+    }
+    .hero-badge {
+      grid-column: 2;
+      justify-self: start;
+    }
+  }
+</style>

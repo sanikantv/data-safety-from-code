@@ -1,0 +1,25 @@
+{
+  "privacy_policy_url": "https://example.com/privacy",
+  "account_creation": ["PSL_ACM_OAUTH"],
+  "account_deletion_url": "https://example.com/delete-account",
+  "data_deletion": "yes",
+  "data_deletion_url": "https://example.com/delete-data",
+  "outside_app_accounts": false,
+  "include_conditional": [
+    "firebase-auth:PSL_EMAIL",
+    "firebase-auth:PSL_NAME",
+    "firebase-firestore:PSL_USER_ACCOUNT",
+    "firebase-analytics:PSL_PURCHASE_HISTORY"
+  ],
+  "add": [
+    {
+      "type": "PSL_USER_GENERATED_CONTENT",
+      "collected": true,
+      "shared": false,
+      "ephemeral": false,
+      "purposes": ["PSL_APP_FUNCTIONALITY"],
+      "reason": "Notes the user writes are saved to Firestore",
+      "evidence": ["app/src/main/java/dev/example/notes/NotesRepository.kt:11"]
+    }
+  ]
+}

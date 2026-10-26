@@ -1,0 +1,56 @@
+---
+title: "ML Kit: Data safety form answers"
+description: "What ML Kit collects for the Google Play Data safety form: device or other IDs, diagnostics. Purposes, sharing and the exact CSV rows."
+keywords:
+  - "ml kit data safety"
+  - "ml kit data safety form"
+  - "ml kit google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **ML Kit (on-device APIs)** from Google, its data counts as data your app collects. According to the vendor, it collects device or other IDs, diagnostics (collected, not shared: the vendor acts as a service provider).
+
+Matched dependencies: `com.google.mlkit:*`, `com.google.android.gms:play-services-mlkit-*`.
+
+<Aside type="tip" title="Source">From Google's own Play data disclosure: [developers.google.com](https://developers.google.com/ml-kit/android-data-disclosure). Checked 2026-10-26.</Aside>
+
+## What to declare
+
+| Data type | Collected | Shared | Ephemeral | Purposes |
+|---|---|---|---|---|
+| Device or other IDs <br/><small>Per-installation identifiers always; a device identifier for thin (Play services) features</small> | Yes | No | No | Analytics |
+| Diagnostics | Yes | No | No | Analytics |
+
+Whether each type is **required or optional** for users depends on your app: optional only if users can turn it off and the app honors that.
+
+## Notes
+
+ML Kit sends only metadata (device and app info, identifiers, latency, API config, input/output size, event types, error codes) for diagnostics and usage analytics, and does not transfer it to third parties. The page does not list images, text or other feature inputs as collected. Thin features add a device identifier; GenAI features add user or device identifiers.
+
+## The CSV rows this sets
+
+These are the rows of Google's [Data safety CSV](/reference/csv-format/) that ML Kit turns to `true` (or `false` for the ephemeral question). Columns: question ID, response ID, value. You also answer the required/optional row for each type.
+
+```csv
+PSL_DATA_TYPES_IDENTIFIERS,PSL_DEVICE_ID,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_DEVICE_ID:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+PSL_DATA_TYPES_APP_PERFORMANCE,PSL_PERFORMANCE_DIAGNOSTICS,true
+PSL_DATA_USAGE_RESPONSES:PSL_PERFORMANCE_DIAGNOSTICS:PSL_DATA_USAGE_COLLECTION_AND_SHARING,PSL_DATA_USAGE_ONLY_COLLECTED,true
+PSL_DATA_USAGE_RESPONSES:PSL_PERFORMANCE_DIAGNOSTICS:PSL_DATA_USAGE_EPHEMERAL,,false
+PSL_DATA_USAGE_RESPONSES:PSL_PERFORMANCE_DIAGNOSTICS:DATA_USAGE_COLLECTION_PURPOSE,PSL_ANALYTICS,true
+```
+
+## Detect it automatically
+
+`data-safety-from-code` finds ML Kit in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

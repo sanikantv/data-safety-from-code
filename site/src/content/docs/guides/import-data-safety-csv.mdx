@@ -1,0 +1,95 @@
+---
+title: How to Import a Data Safety CSV in Play Console
+description: Import a Data safety CSV in Play Console without losing answers. Back up first, keep Google's row format, fix common import errors, and check the preview before you submit.
+keywords:
+  - how to import data safety csv
+  - import data safety csv play console
+  - data safety csv upload
+  - data safety csv format
+faq:
+  - q: Does importing a Data safety CSV replace my current answers?
+    a: Yes. Google's help page says answers already in the form are overwritten when you import a CSV, so export a backup first.
+  - q: Can I upload the Data safety CSV without opening Play Console?
+    a: Yes. The Google Play Developer API has a dataSafety method that takes the full CSV contents as a string and writes the declaration. It needs a service account with access to the app.
+---
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+**Short answer:** in Play Console, open **App content**, select **Start** under Data safety,
+and use the import button near the top right of the page to choose your CSV. Importing replaces
+every answer in the form, so export a backup first. Then check the store listing preview, save
+and submit.
+
+## Steps
+
+1. **Back up.** On the same Data safety page, select **Export to CSV** and keep the file. See
+   [how to export the Data safety CSV](/guides/export-data-safety-csv/).
+2. **Start from Google's format.** The safest base for your import is a fresh export, because
+   it always has the current questions. Google's help page also offers a sample CSV to download.
+3. **Fill the Response value column** and nothing else. Google's help page says to enter TRUE
+   or FALSE there. A few rows, such as the account deletion URL, take text instead.
+4. **Import.** Select the import button near the top right of the Data safety page. Google's
+   help page names it **Import to CSV**, under a section called "Import from a CSV file".
+5. **Check the result** in the form and in the store listing preview.
+6. **Save as draft** or **Submit**.
+
+Google's warning is short: "Answers already entered into your form will be overwritten when you
+import a CSV." ([Play Console Help](https://support.google.com/googleplay/android-developer/answer/10787469))
+
+## What the CSV looks like
+
+Each row is one response. There are five columns:
+
+```csv
+Question ID (machine readable),Response ID (machine readable),Response value,Answer requirement,Human-friendly question label
+PSL_DATA_COLLECTION_COLLECTS_PERSONAL_DATA,,true,REQUIRED,Does your app collect or share any of the required user data types?
+PSL_DATA_TYPES_LOCATION,PSL_APPROX_LOCATION,true,MULTIPLE_CHOICE,Location / Approximate location
+```
+
+The **Answer requirement** column is one of `OPTIONAL`, `REQUIRED`, `MULTIPLE_CHOICE`,
+`SINGLE_CHOICE` or `MAYBE_REQUIRED`. Leave it as Google wrote it. Every question and response
+ID is listed in the [CSV format reference](/reference/csv-format/).
+
+The privacy policy URL is not a row in the CSV. You enter it in Play Console.
+
+## Uploading without Play Console
+
+If you already publish from CI with a service account, two options send the same CSV:
+
+- The Google Play Developer API method
+  [applications.dataSafety](https://developers.google.com/android-publisher/api-ref/rest/v3/applications/dataSafety)
+  takes the full CSV contents in a `safetyLabels` string. Like the manual import, it replaces
+  the whole declaration.
+- The community fastlane plugin `fastlane-plugin-google_data_safety` has an
+  `upload_google_data_safety` action. See the [comparison](/comparison/) for what it does.
+
+A manual import is the better default for most people, because you see the result before you
+save.
+
+## Common mistakes
+
+- **No backup.** If the import goes wrong, your old answers are gone unless you exported them.
+- **An old template.** If Google added or changed questions since you saved your file, rows
+  won't match. Export again and copy your answers across.
+- **Editing more than the Response value.** Changing an ID, the requirement column or the row
+  layout makes the file disagree with Google's format.
+- **A data type selected with no usage answers.** Each selected type needs collected/shared,
+  ephemeral (if collected), required/optional and at least one purpose.
+- **Conflicting account answers.** `PSL_ACM_NONE` ("my app does not allow users to create an
+  account") selected together with another method.
+- **Spreadsheet side effects.** If you edit in a spreadsheet app, save as plain CSV and check
+  that the ID columns came through unchanged.
+
+## With data-safety-from-code
+
+The skill only changes the Response value column of your own export, row for row, and
+validates the file as it writes it. Its validator flags rows that don't match the template,
+unanswered required questions, data types without usage answers and conflicting choices. It
+also tells you to export a backup before importing. [Get started](/getting-started/).
+
+## Related
+
+- [Export the Data safety CSV](/guides/export-data-safety-csv/)
+- [How to fill the Data safety form](/guides/how-to-fill-data-safety-form/)
+- [CSV format reference](/reference/csv-format/)
+
+<GuideEnd />

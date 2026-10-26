@@ -1,0 +1,91 @@
+---
+title: Is an IP Address Location in the Data Safety Form?
+description: When an IP address counts as location in Google Play's Data safety form, why it is approximate rather than precise location, and which SDKs derive location from IP addresses.
+keywords:
+  - is ip address location data safety
+  - ip address approximate location google play
+  - data safety form ip address
+  - approximate vs precise location data safety
+faq:
+  - q: Do I have to declare location if I only use the IP address?
+    a: If you or an SDK in your app use the IP address to determine location, yes. Google says to declare location in that case, and an IP-based location is approximate location.
+  - q: Is IP-based location approximate or precise?
+    a: Approximate. Google defines approximate location as an area of 3 square kilometers or more, and lists location inferred from an IP address as an example.
+---
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+**Short answer:** if your app, your server or an SDK uses the IP address to work out where the
+user is, you declare **Approximate location**. Google says to declare IP addresses based on how
+you actually use them, and location derived from an IP is approximate, not precise.
+
+## What Google says
+
+From Google's [Data safety help page](https://support.google.com/googleplay/android-developer/answer/10787469):
+
+- Declare collection, use and sharing of IP addresses based on how you actually use them.
+- If you use an IP address to determine location, declare location.
+- **Approximate location** is an area of 3 square kilometers or more, and includes location
+  inferred from an IP address. City-level location and Android's `ACCESS_COARSE_LOCATION`
+  permission are other examples.
+- **Precise location** is an area under 3 square kilometers.
+
+Google's page doesn't map every other use of an IP address to one data type. If you keep IP
+addresses for another reason, such as security, read the page and decide based on that use.
+
+## Who derives location from IP
+
+Several SDKs do this on your behalf. From this project's SDK knowledge base, which links each
+vendor's own page:
+
+- **[AdMob](/sdk/admob/)**: the IP address may be used to estimate general location. Declared
+  as approximate location, collected and shared.
+- **[Firebase Analytics](/sdk/firebase-analytics/)**: approximate location derived from a masked
+  IP address. Collected, not shared.
+- **Firebase Performance Monitoring**: collects the IP address to map events to countries. The
+  entry leaves it to you to decide whether to declare approximate location.
+- **Mixpanel**: recorded as collecting approximate location. That entry is inferred, not from a
+  Play-specific disclosure.
+
+Your own code counts too. A call to an IP geolocation service, or a server that looks up the
+caller's country from the request IP, is location collection.
+
+## When it can be ephemeral
+
+If the IP-based location is used only to answer one request, such as picking a regional server,
+and nothing stores it, you can answer yes to the ephemeral question for approximate location.
+That only works if no other source, such as an analytics SDK, collects approximate location in a
+non-ephemeral way. See [ephemeral processing](/guides/ephemeral-processing/).
+
+## CSV IDs
+
+- `PSL_DATA_TYPES_LOCATION` with `PSL_APPROX_LOCATION`: the data type.
+- `PSL_PRECISE_LOCATION`: only for GPS-level location, not for IP.
+- Usage rows for the type start with `PSL_DATA_USAGE_RESPONSES:PSL_APPROX_LOCATION:`, for
+  example `PSL_DATA_USAGE_ONLY_COLLECTED`, `PSL_DATA_USAGE_ONLY_SHARED`, the ephemeral row, and
+  purposes such as `PSL_ANALYTICS`, `PSL_ADVERTISING` or `PSL_FRAUD_PREVENTION_SECURITY`.
+
+## Common mistakes
+
+- **No location declared because the app has no location permission.** IP-based location needs
+  no permission.
+- **Declaring precise location for IP lookups.** IP-based location is approximate.
+- **Missing the SDK case.** Ads and analytics SDKs can derive location from the IP address even
+  if your code never does.
+- **Marking it shared for a service provider.** Firebase Analytics is collected, not shared; an
+  ad network like AdMob is both.
+
+## With data-safety-from-code
+
+The skill adds approximate location automatically when an SDK's disclosure lists it, with the
+vendor page as evidence. It also flags calls to common IP geolocation services in your source,
+such as `ipinfo.io` or `ip-api.com`, so the agent can check the code and declare approximate
+location where it applies. [Get started](/getting-started/).
+
+## Related
+
+- [Collected vs shared](/guides/collected-vs-shared/)
+- [What is ephemeral processing?](/guides/ephemeral-processing/)
+- [Data safety form rejected?](/guides/data-safety-form-rejected/)
+- [Definitions reference](/reference/definitions/)
+
+<GuideEnd />

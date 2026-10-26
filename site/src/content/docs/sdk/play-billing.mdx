@@ -1,0 +1,44 @@
+---
+title: "Google Play Billing Library: Data safety form answers"
+description: "How to declare Google Play Billing Library in the Google Play Data safety form: what it can collect, when it applies, and the CSV rows to set."
+keywords:
+  - "google play billing library data safety"
+  - "google play billing library data safety form"
+  - "google play billing library google play data safety"
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Install from '../../../components/Install.astro';
+import GuideEnd from '../../../components/GuideEnd.astro';
+
+If your Android app includes **Google Play Billing Library** from Google, its data counts as data your app collects. What it collects depends on how you use it, so each data type below has a condition.
+
+Matched dependencies: `com.android.billingclient:billing`.
+
+<Aside type="caution" title="No official vendor disclosure">This entry is inferred from the SDK's behavior and Google's definitions, not from a vendor data-safety page (see [source](https://support.google.com/googleplay/android-developer/answer/10787469), checked 2026-10-26). Check it against your own use of the SDK.</Aside>
+
+## What it can collect
+
+| Data type | When | Collected | Shared | Purposes |
+|---|---|---|---|---|
+| Purchase history | If the app or its backend stores or verifies purchases (tokens, order IDs) off-device | Yes | No | App functionality |
+
+The skill lists these under *Needs your review* and checks the code for the condition (for example a `setUserId` call) before you include them.
+
+## Notes
+
+No vendor Play disclosure page for the Billing Library was found. Google's Data safety help says payment data collected directly by the payment service (and never accessed by your app) need not be declared, but purchase history your app or backend receives should be reviewed. Declare purchase history if you send purchase tokens or orders off-device.
+
+## Detect it automatically
+
+`data-safety-from-code` finds Google Play Billing Library in your `build.gradle` or version catalog, adds these answers with a link to the source, and merges them with every other SDK and with what your own code sends. You get a CSV to import and a report showing where each answer comes from.
+
+<Install />
+
+## Other payments SDKs
+
+- [RevenueCat data safety](/sdk/revenuecat/)
+
+Related: [collected vs shared](/guides/collected-vs-shared/) · [how to fill the Data safety form](/guides/how-to-fill-data-safety-form/) · [all SDKs](/sdk/)
+
+<GuideEnd />

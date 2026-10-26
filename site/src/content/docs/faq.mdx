@@ -1,0 +1,114 @@
+---
+title: Google Play Data Safety Form FAQ
+description: Answers to common questions about Google Play's Data safety form, its CSV import and export, SDK data, and what the data-safety-from-code skill does and does not do.
+keywords:
+  - google play data safety form faq
+  - data safety form questions
+  - data safety csv faq
+  - data safety form generator
+faq:
+  - q: Do I need a Data safety form if my app collects no data?
+    a: Yes. Google says even apps that collect no user data must complete the form and provide a privacy policy. Apps active only on an internal testing track are exempt.
+  - q: Do I have to declare what SDKs collect?
+    a: Yes. Data that libraries and SDKs in your app send off the device counts as collected by your app. Google points developers to their SDK providers' guidance and the Google Play SDK Index.
+  - q: Does data stored only on the phone count as collected?
+    a: No. Collection means sending data off the device. Data processed only on the device is not collected.
+  - q: Is Firebase "sharing" data?
+    a: Generally no. Firebase processes data on your behalf as a service provider, which Google does not count as sharing. You still declare the data as collected. Some settings, such as linking Google Ads to Analytics, can change this.
+  - q: Can I fill the form with a CSV?
+    a: Yes. Export the form as a CSV from the Data safety page in Play Console, fill the Response value column, and import it. Importing overwrites every answer already in the form.
+  - q: Can I read my Data safety answers through the Play Developer API?
+    a: No read method is documented. The applications.dataSafety method only writes a declaration. Export from Play Console to get your current answers.
+  - q: Does one form cover every version of my app?
+    a: Yes. There is one form per package name, and it describes the sum of what every version distributed on Google Play collects and shares.
+  - q: How long until Data safety changes show on Google Play?
+    a: Google says it may take several days, and in some cases up to 7 days.
+  - q: Does Google check that my answers are correct?
+    a: Google reviews the form as part of app review, but says the review is not designed to verify the accuracy and completeness of your declarations. You are responsible for them, and Google may take enforcement action if the app does not match.
+  - q: Does data-safety-from-code guarantee an accurate form?
+    a: No. It produces a draft CSV and a report with evidence for every answer. You review it, change what is wrong, and you are responsible for what you submit.
+  - q: Does the skill upload the form to Play Console for me?
+    a: Not by default. It writes a CSV that you import yourself after checking the preview. If you already use a Play service account in CI and ask for it, it can show you how to upload with the API, but it never handles your key.
+  - q: What can't the skill see?
+    a: Your backend, console settings of SDKs, data entered in WebViews or third-party screens, and older app versions. The report lists these so you can answer them yourself.
+---
+
+These answers are based on Google's
+[Data safety help page](https://support.google.com/googleplay/android-developer/answer/10787469)
+and on how the skill works. Where Google's page and this site disagree, Google's page wins.
+
+## About the form
+
+### Do I need a Data safety form if my app collects no data?
+
+Yes. Google says even apps that collect no user data must complete the form and provide a
+privacy policy. Apps active only on an internal testing track are exempt. See
+[the form for apps that collect no data](/guides/app-with-no-data/).
+
+### Do I have to declare what SDKs collect?
+
+Yes. Data that libraries and SDKs in your app send off the device counts as collected by your
+app. Google points developers to their SDK providers' guidance and the Google Play SDK Index.
+The [SDK pages](/sdk/) here summarize common ones and link the vendor pages.
+
+### Does data stored only on the phone count as collected?
+
+No. Collection means sending data off the device. Data processed only on the device is not
+collected. See [collected vs shared](/guides/collected-vs-shared/).
+
+### Is Firebase "sharing" data?
+
+Generally no. Firebase processes data on your behalf as a service provider, which Google does
+not count as sharing. You still declare the data as collected. Some settings, such as linking
+Google Ads to Analytics, can change this. See [Firebase Analytics](/sdk/firebase-analytics/).
+
+### Does one form cover every version of my app?
+
+Yes. There is one form per package name, and it describes the sum of what every version
+distributed on Google Play collects and shares.
+
+### How long until Data safety changes show on Google Play?
+
+Google says it may take several days, and in some cases up to 7 days.
+
+### Does Google check that my answers are correct?
+
+Google reviews the form as part of app review, but says the review is not designed to verify the
+accuracy and completeness of your declarations. You are responsible for them, and Google may
+take enforcement action if the app does not match. See
+[what to do when the form is rejected](/guides/data-safety-form-rejected/).
+
+## About the CSV
+
+### Can I fill the form with a CSV?
+
+Yes. Export the form as a CSV from the Data safety page in Play Console, fill the Response value
+column, and import it. Importing overwrites every answer already in the form. See
+[export](/guides/export-data-safety-csv/) and [import](/guides/import-data-safety-csv/).
+
+### Can I read my Data safety answers through the Play Developer API?
+
+No read method is documented. The
+[applications.dataSafety](https://developers.google.com/android-publisher/api-ref/rest/v3/applications/dataSafety)
+method only writes a declaration. Export from Play Console to get your current answers.
+
+## About data-safety-from-code
+
+### Does data-safety-from-code guarantee an accurate form?
+
+No. It produces a draft CSV and a report with evidence for every answer. You review it, change
+what is wrong, and you are responsible for what you submit. [How it works](/how-it-works/).
+
+### Does the skill upload the form to Play Console for me?
+
+Not by default. It writes a CSV that you import yourself after checking the preview. If you
+already use a Play service account in CI and ask for it, it can show you how to upload with the
+API, but it never handles your key.
+
+### What can't the skill see?
+
+Your backend, console settings of SDKs, data entered in WebViews or third-party screens, and
+older app versions. The report lists these so you can answer them yourself.
+
+To try it, see [getting started](/getting-started/). For how it compares with filling the form
+by hand or with other tools, see the [comparison](/comparison/).

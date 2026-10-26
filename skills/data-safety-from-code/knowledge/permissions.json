@@ -1,0 +1,322 @@
+[
+  {
+    "permission": "android.permission.ACCESS_FINE_LOCATION",
+    "types": [
+      "PSL_PRECISE_LOCATION"
+    ],
+    "apis": [
+      "FusedLocationProviderClient",
+      "LocationServices\\.",
+      "getLastLocation|lastLocation",
+      "requestLocationUpdates",
+      "getCurrentLocation",
+      "LocationManager",
+      "Geofenc"
+    ]
+  },
+  {
+    "permission": "android.permission.ACCESS_COARSE_LOCATION",
+    "types": [
+      "PSL_APPROX_LOCATION"
+    ],
+    "apis": [
+      "FusedLocationProviderClient",
+      "LocationServices\\.",
+      "getLastLocation|lastLocation",
+      "requestLocationUpdates",
+      "getCurrentLocation",
+      "LocationManager"
+    ]
+  },
+  {
+    "permission": "android.permission.ACCESS_BACKGROUND_LOCATION",
+    "types": [
+      "PSL_PRECISE_LOCATION",
+      "PSL_APPROX_LOCATION"
+    ],
+    "apis": [
+      "requestLocationUpdates",
+      "Geofenc"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_CONTACTS",
+    "types": [
+      "PSL_CONTACTS"
+    ],
+    "apis": [
+      "ContactsContract",
+      "ACTION_PICK.*Contacts",
+      "PickContact"
+    ]
+  },
+  {
+    "permission": "android.permission.WRITE_CONTACTS",
+    "types": [
+      "PSL_CONTACTS"
+    ],
+    "apis": [
+      "ContactsContract"
+    ]
+  },
+  {
+    "permission": "android.permission.GET_ACCOUNTS",
+    "types": [
+      "PSL_EMAIL",
+      "PSL_USER_ACCOUNT"
+    ],
+    "apis": [
+      "AccountManager",
+      "getAccounts"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_CALENDAR",
+    "types": [
+      "PSL_CALENDAR"
+    ],
+    "apis": [
+      "CalendarContract"
+    ]
+  },
+  {
+    "permission": "android.permission.WRITE_CALENDAR",
+    "types": [
+      "PSL_CALENDAR"
+    ],
+    "apis": [
+      "CalendarContract"
+    ]
+  },
+  {
+    "permission": "android.permission.CAMERA",
+    "types": [
+      "PSL_PHOTOS",
+      "PSL_VIDEOS"
+    ],
+    "apis": [
+      "ImageCapture",
+      "VideoCapture",
+      "CameraX|ProcessCameraProvider",
+      "CameraManager",
+      "ACTION_IMAGE_CAPTURE",
+      "ACTION_VIDEO_CAPTURE",
+      "TakePicture",
+      "CaptureVideo"
+    ]
+  },
+  {
+    "permission": "android.permission.RECORD_AUDIO",
+    "types": [
+      "PSL_AUDIO",
+      "PSL_OTHER_AUDIO"
+    ],
+    "apis": [
+      "AudioRecord",
+      "MediaRecorder",
+      "SpeechRecognizer",
+      "RecognizerIntent"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_MEDIA_IMAGES",
+    "types": [
+      "PSL_PHOTOS"
+    ],
+    "apis": [
+      "MediaStore\\.Images",
+      "PickVisualMedia",
+      "GetContent",
+      "ACTION_GET_CONTENT",
+      "ACTION_PICK"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_MEDIA_VIDEO",
+    "types": [
+      "PSL_VIDEOS"
+    ],
+    "apis": [
+      "MediaStore\\.Video",
+      "PickVisualMedia"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+    "types": [
+      "PSL_PHOTOS",
+      "PSL_VIDEOS"
+    ],
+    "apis": [
+      "MediaStore\\.",
+      "PickVisualMedia"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_MEDIA_AUDIO",
+    "types": [
+      "PSL_MUSIC",
+      "PSL_OTHER_AUDIO"
+    ],
+    "apis": [
+      "MediaStore\\.Audio"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_EXTERNAL_STORAGE",
+    "types": [
+      "PSL_PHOTOS",
+      "PSL_VIDEOS",
+      "PSL_FILES_AND_DOCS"
+    ],
+    "apis": [
+      "MediaStore\\.",
+      "Environment\\.getExternalStorage",
+      "ACTION_OPEN_DOCUMENT",
+      "OpenDocument",
+      "GetContent"
+    ]
+  },
+  {
+    "permission": "android.permission.MANAGE_EXTERNAL_STORAGE",
+    "types": [
+      "PSL_FILES_AND_DOCS"
+    ],
+    "apis": [
+      "Environment\\.getExternalStorage",
+      "ACTION_MANAGE_ALL_FILES"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_SMS",
+    "types": [
+      "PSL_SMS_CALL_LOG"
+    ],
+    "apis": [
+      "Telephony\\.Sms",
+      "content://sms"
+    ]
+  },
+  {
+    "permission": "android.permission.RECEIVE_SMS",
+    "types": [
+      "PSL_SMS_CALL_LOG"
+    ],
+    "apis": [
+      "SMS_RECEIVED",
+      "SmsMessage"
+    ]
+  },
+  {
+    "permission": "android.permission.SEND_SMS",
+    "types": [
+      "PSL_SMS_CALL_LOG"
+    ],
+    "apis": [
+      "SmsManager"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_CALL_LOG",
+    "types": [
+      "PSL_SMS_CALL_LOG"
+    ],
+    "apis": [
+      "CallLog\\.Calls"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_PHONE_STATE",
+    "types": [
+      "PSL_DEVICE_ID"
+    ],
+    "apis": [
+      "TelephonyManager",
+      "getImei|getDeviceId|getSubscriberId"
+    ]
+  },
+  {
+    "permission": "android.permission.READ_PHONE_NUMBERS",
+    "types": [
+      "PSL_PHONE"
+    ],
+    "apis": [
+      "getLine1Number",
+      "SubscriptionManager"
+    ]
+  },
+  {
+    "permission": "com.google.android.gms.permission.AD_ID",
+    "types": [
+      "PSL_DEVICE_ID"
+    ],
+    "apis": [
+      "AdvertisingIdClient",
+      "getAdvertisingIdInfo"
+    ]
+  },
+  {
+    "permission": "android.permission.QUERY_ALL_PACKAGES",
+    "types": [
+      "PSL_APPS_ON_DEVICE"
+    ],
+    "apis": [
+      "getInstalledPackages",
+      "getInstalledApplications",
+      "queryIntentActivities"
+    ]
+  },
+  {
+    "permission": "android.permission.BODY_SENSORS",
+    "types": [
+      "PSL_HEALTH"
+    ],
+    "apis": [
+      "Sensor\\.TYPE_HEART_RATE",
+      "SensorManager"
+    ]
+  },
+  {
+    "permission": "android.permission.ACTIVITY_RECOGNITION",
+    "types": [
+      "PSL_FITNESS"
+    ],
+    "apis": [
+      "ActivityRecognition",
+      "Sensor\\.TYPE_STEP_COUNTER",
+      "Sensor\\.TYPE_STEP_DETECTOR"
+    ]
+  },
+  {
+    "permission": "android.permission.health.*",
+    "types": [
+      "PSL_HEALTH",
+      "PSL_FITNESS"
+    ],
+    "apis": [
+      "HealthConnectClient",
+      "readRecords",
+      "insertRecords"
+    ]
+  },
+  {
+    "permission": "android.permission.BLUETOOTH_SCAN",
+    "types": [
+      "PSL_PRECISE_LOCATION"
+    ],
+    "apis": [
+      "BluetoothLeScanner",
+      "startScan"
+    ]
+  },
+  {
+    "permission": "android.permission.NEARBY_WIFI_DEVICES",
+    "types": [
+      "PSL_PRECISE_LOCATION"
+    ],
+    "apis": [
+      "WifiManager",
+      "WifiAwareManager"
+    ]
+  }
+]
